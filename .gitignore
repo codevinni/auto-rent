@@ -1,3 +1,11 @@
+# Eclipse
+.metadata/
+.plugins/
+.settings/
+.classpath
+.project
+RemoteSystemsTempFiles/
+
 # Compiled class file
 *.class
 
@@ -9,6 +17,11 @@
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
+
+# Build
+target/
+build/
+bin/
 
 # Package Files #
 *.jar
