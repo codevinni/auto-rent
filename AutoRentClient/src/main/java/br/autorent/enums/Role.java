@@ -2,7 +2,7 @@ package br.autorent.enums;
 
 public enum Role {
 
-	CLIENT("Client"),
+	CUSTOMER("Client"),
 	EMPLOYEE("Employee");
 	
 	private String description;

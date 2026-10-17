@@ -7,14 +7,20 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 /**
  * 
  */
 @Entity
 @Table(name = "user_table")
+@NamedQueries({
+	@NamedQuery(name = "User.authenticate", query = "SELECT u FROM User u WHERE u.cpf = :cpf")
+})
 public class User {
 
 	@Id
@@ -25,16 +31,18 @@ public class User {
 	private String cpf;
 	private String email;
 	private String passwordHash;
+	@Transient
+	private String plainPassword;
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
 	public User() {}
 	
-	public User(String name, String cpf, String email, String passwordHash, Role role) {
+	public User(String name, String cpf, String email, String plainPassword, Role role) {
 		this.name = name;
 		this.cpf = cpf;
 		this.email = email;
-		this.passwordHash = passwordHash;
+		this.plainPassword = plainPassword;
 		this.role = role;
 	}
 
@@ -106,6 +114,20 @@ public class User {
 	 */
 	public void setPasswordHash(String passwordHash) {
 		this.passwordHash = passwordHash;
+	}
+	
+	/**
+	 * @return the plainPassword
+	 */
+	public String getPlainPassword() {
+		return plainPassword;
+	}
+
+	/**
+	 * @param plainPassword the plainPassword to set
+	 */
+	public void setPlainPassword(String plainPassword) {
+		this.plainPassword = plainPassword;
 	}
 
 	/**
