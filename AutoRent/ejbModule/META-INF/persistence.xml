@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.2" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd">
+	
+	<persistence-unit name="autorent" transaction-type="JTA">
+	
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<jta-data-source>PostgresDS</jta-data-source>
+		<class>br.autorent.model.Vehicle</class>
+		<class>br.autorent.model.User</class>
+		<class>br.autorent.model.Rental</class>
+		<class>br.autorent.model.Accessory</class>
+		<class>br.autorent.model.Agency</class>
+		
+		<properties>
+			<property name="hibernate.hbm2ddl.auto" value="create"/>
+			<property name="hibernate.show_sql" value="true"/>
+		</properties>
+		
+	</persistence-unit>
+	
+
+	
+</persistence>
