@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core">
+	  
+<h:head>
+    <title>AutoRent - Dashboard</title>
+</h:head>
+<h:body>
+    <h1>AutoRent - Painel do Cliente</h1>
+
+    <h:panelGroup rendered="#{authMB.authenticated}">
+        <p>
+            Olá, <strong>#{authMB.loggedUser.name}</strong> (CPF: #{authMB.loggedUser.cpf}) | 
+            <h:link outcome="dashboard.xhtml" value="Dashboard" /> | 
+            <h:link outcome="vehicles.xhtml" value="Consultar Veículos" /> | 
+            <h:link outcome="my-rentals.xhtml" value="Minhas Locações" /> | 
+            <h:form style="display:inline;">
+                <h:commandLink value="Sair" action="#{authMB.logout}" />
+            </h:form>
+        </p>
+    </h:panelGroup>
+
+    <h:panelGroup rendered="#{!authMB.authenticated}">
+        <p>Você precisa estar conectado para acessar o Dashboard. <h:link outcome="login.xhtml" value="Fazer Login" /></p>
+    </h:panelGroup>
+
+    <hr />
+
+    <h:messages globalOnly="false" />
+
+    <h:panelGroup rendered="#{authMB.authenticated}">
+
+        <h2>Veículo Atualmente Alugado</h2>
+        <h:panelGroup rendered="#{dashboardMB.hasCurrentRented()}">
+            <table border="1">
+                <tr>
+                    <th>Veículo</th>
+                    <td>#{dashboardMB.currentRented.vehicle.brand} #{dashboardMB.currentRented.vehicle.model} (#{dashboardMB.currentRented.vehicle.licensePlate})</td>
+                </tr>
+                <tr>
+                    <th>Agência de Retirada</th>
+                    <td>#{dashboardMB.currentRented.pickupAgency.name}</td>
+                </tr>
+                <tr>
+                    <th>Agência de Devolução</th>
+                    <td>#{dashboardMB.currentRented.returnAgency.name}</td>
+                </tr>
+                <tr>
+                    <th>Data de Retirada</th>
+                    <td>#{dashboardMB.currentRented.pickupDate}</td>
+                </tr>
+                <tr>
+                    <th>Devolução Prevista</th>
+                    <td>#{dashboardMB.currentRented.expectedReturnDate}</td>
+                </tr>
+                <tr>
+                    <th>Valor Total</th>
+                    <td>R$ #{dashboardMB.currentRented.totalPrice}</td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td><strong>#{dashboardMB.currentRented.status.description}</strong></td>
+                </tr>
+            </table>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{!dashboardMB.hasCurrentRented()}">
+            <p>Você não possui nenhum veículo alugado em andamento no momento.</p>
+        </h:panelGroup>
+
+        <hr />
+
+        <h2>Minhas Locações Ativas (Em Andamento)</h2>
+        <h:dataTable value="#{dashboardMB.activeRentals}" var="loc" border="1" cellpadding="5" rendered="#{not empty dashboardMB.activeRentals}">
+            <h:column>
+                <f:facet name="header">Código</f:facet>
+                #{loc.id}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Veículo</f:facet>
+                #{loc.vehicle.brand} #{loc.vehicle.model} (#{loc.vehicle.licensePlate})
+            </h:column>
+            <h:column>
+                <f:facet name="header">Retirada</f:facet>
+                #{loc.pickupDate} (#{loc.pickupAgency.name})
+            </h:column>
+            <h:column>
+                <f:facet name="header">Prev. Devolução</f:facet>
+                #{loc.expectedReturnDate} (#{loc.returnAgency.name})
+            </h:column>
+            <h:column>
+                <f:facet name="header">Valor</f:facet>
+                R$ #{loc.totalPrice}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Status</f:facet>
+                #{loc.status.description}
+            </h:column>
+        </h:dataTable>
+        <h:panelGroup rendered="#{empty dashboardMB.activeRentals}">
+            <p>Nenhuma locação ativa no momento.</p>
+        </h:panelGroup>
+
+        <hr />
+
+        <h2>Minhas Reservas</h2>
+        <h:dataTable value="#{dashboardMB.reservations}" var="res" border="1" cellpadding="5" rendered="#{not empty dashboardMB.reservations}">
+            <h:column>
+                <f:facet name="header">Código</f:facet>
+                #{res.id}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Veículo</f:facet>
+                #{res.vehicle.brand} #{res.vehicle.model} (#{res.vehicle.licensePlate})
+            </h:column>
+            <h:column>
+                <f:facet name="header">Data Retirada</f:facet>
+                #{res.pickupDate} (#{res.pickupAgency.name})
+            </h:column>
+            <h:column>
+                <f:facet name="header">Devolução Prevista</f:facet>
+                #{res.expectedReturnDate} (#{res.returnAgency.name})
+            </h:column>
+            <h:column>
+                <f:facet name="header">Valor Estimado</f:facet>
+                R$ #{res.totalPrice}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Status</f:facet>
+                #{res.status.description}
+            </h:column>
+        </h:dataTable>
+        <h:panelGroup rendered="#{empty dashboardMB.reservations}">
+            <p>Nenhuma reserva futura no momento.</p>
+        </h:panelGroup>
+
+        <hr />
+
+        <h3>Ações Rápidas</h3>
+        <p>
+            <h:link outcome="vehicles.xhtml" value="&gt;&gt; Alugar ou Reservar um Novo Veículo" /> | 
+            <h:link outcome="my-rentals.xhtml" value="&gt;&gt; Ver Histórico Completo de Locações" />
+        </p>
+
+    </h:panelGroup>
+
+</h:body>
+</html>

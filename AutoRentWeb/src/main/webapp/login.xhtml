@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>AutoRent - Login</title>
+</h:head>
+<h:body>
+    <h1>AutoRent - Acesso do Cliente</h1>
+
+    <p>
+        <h:link outcome="index.xhtml" value="Início" /> | 
+        <h:link outcome="vehicles.xhtml" value="Consultar Veículos" /> | 
+        <h:link outcome="register.xhtml" value="Cadastre-se" />
+    </p>
+
+    <hr />
+
+    <h:messages globalOnly="false" />
+
+    <h2>Entrar na sua conta</h2>
+
+    <h:form>
+        <h:panelGrid columns="2">
+            <h:outputLabel for="cpf" value="CPF:" />
+            <h:inputText id="cpf" value="#{authMB.cpf}" required="true" requiredMessage="O CPF é obrigatório." />
+
+            <h:outputLabel for="senha" value="Senha:" />
+            <h:inputSecret id="senha" value="#{authMB.password}" required="true" requiredMessage="A senha é obrigatória." />
+
+            <h:outputText value="" />
+            <h:commandButton value="Entrar" action="#{authMB.login}" />
+        </h:panelGrid>
+    </h:form>
+
+    <br />
+    <p>Ainda não tem conta? <h:link outcome="register.xhtml" value="Cadastre-se aqui" />.</p>
+
+</h:body>
+</html>

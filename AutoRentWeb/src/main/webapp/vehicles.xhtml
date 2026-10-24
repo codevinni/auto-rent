@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core">
+	  
+<h:head>
+    <title>AutoRent - Frota de Veículos</title>
+</h:head>
+<h:body>
+    <h1>AutoRent - Catálogo de Veículos</h1>
+
+    <h:panelGroup rendered="#{authMB.authenticated}">
+        <p>
+            Olá, <strong>#{authMB.loggedUser.name}</strong> | 
+            <h:link outcome="dashboard.xhtml" value="Dashboard" /> | 
+            <h:link outcome="vehicles.xhtml" value="Consultar Veículos" /> | 
+            <h:link outcome="my-rentals.xhtml" value="Minhas Locações" /> | 
+            <h:form style="display:inline;">
+                <h:commandLink value="Sair" action="#{authMB.logout}" />
+            </h:form>
+        </p>
+    </h:panelGroup>
+
+    <h:panelGroup rendered="#{!authMB.authenticated}">
+        <p>
+            <h:link outcome="index.xhtml" value="Início" /> | 
+            <h:link outcome="login.xhtml" value="Login" /> | 
+            <h:link outcome="register.xhtml" value="Cadastre-se" />
+        </p>
+    </h:panelGroup>
+
+    <hr />
+
+    <h:messages globalOnly="false" />
+
+    <h2>Filtros de Busca</h2>
+
+    <h:form id="filtroForm">
+        <h:panelGrid columns="4" cellpadding="4">
+            <h:outputLabel for="categoria" value="Categoria:" />
+            <h:selectOneMenu id="categoria" value="#{vehicleCatalogMB.selectedCategory}">
+                <f:selectItem itemLabel="-- Todas as Categorias --" itemValue="" />
+                <f:selectItems value="#{vehicleCatalogMB.categories}" var="c" itemLabel="#{c.description}" itemValue="#{c}" />
+            </h:selectOneMenu>
+
+            <h:outputLabel for="agencia" value="Agência:" />
+            <h:selectOneMenu id="agencia" value="#{vehicleCatalogMB.selectedAgencyId}">
+                <f:selectItem itemLabel="-- Todas as Agências --" itemValue="" />
+                <f:selectItems value="#{vehicleCatalogMB.agencies}" var="ag" itemLabel="#{ag.name}" itemValue="#{ag.id}" />
+            </h:selectOneMenu>
+
+            <h:outputLabel for="status" value="Disponibilidade:" />
+            <h:selectOneMenu id="status" value="#{vehicleCatalogMB.selectedStatus}">
+                <f:selectItem itemLabel="-- Todos os Status --" itemValue="" />
+                <f:selectItems value="#{vehicleCatalogMB.statuses}" var="st" itemLabel="#{st.description}" itemValue="#{st}" />
+            </h:selectOneMenu>
+
+            <h:outputText value="" />
+            <h:panelGroup>
+                <h:commandButton value="Filtrar" action="#{vehicleCatalogMB.search}" />
+                <h:commandButton value="Limpar" action="#{vehicleCatalogMB.clearFilters}" style="margin-left: 5px;" />
+            </h:panelGroup>
+        </h:panelGrid>
+    </h:form>
+
+    <hr />
+
+    <h2>Veículos Encontrados</h2>
+
+    <h:form id="tabelaForm">
+        <h:dataTable value="#{vehicleCatalogMB.vehicles}" var="v" border="1" cellpadding="5" rendered="#{not empty vehicleCatalogMB.vehicles}">
+            <h:column>
+                <f:facet name="header">Veículo</f:facet>
+                #{v.brand} #{v.model} (#{v.year})
+            </h:column>
+            <h:column>
+                <f:facet name="header">Categoria</f:facet>
+                #{v.category.description}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Placa</f:facet>
+                #{v.licensePlate}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Agência Atual</f:facet>
+                #{v.agency.name}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Diária</f:facet>
+                R$ #{v.dailyPrice}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Status</f:facet>
+                #{v.status.description}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Ações</f:facet>
+                <h:panelGroup rendered="#{v.status eq 'AVAILABLE'}">
+                     | 
+                    <h:commandButton value="Alugar / Reservar" action="#{rentalProcessWebMB.startFlow(v.id)}" />
+                </h:panelGroup>
+            </h:column>
+        </h:dataTable>
+        <h:panelGroup rendered="#{empty vehicleCatalogMB.vehicles}">
+            <p>Nenhum veículo encontrado com os filtros selecionados.</p>
+        </h:panelGroup>
+    </h:form>
+
+</h:body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>AutoRent - Cadastro de Cliente</title>
+</h:head>
+<h:body>
+    <h1>AutoRent - Cadastro de Cliente</h1>
+
+    <p>
+        <h:link outcome="index.xhtml" value="Início" /> | 
+        <h:link outcome="login.xhtml" value="Já tenho conta (Login)" /> | 
+        <h:link outcome="vehicles.xhtml" value="Consultar Veículos" />
+    </p>
+
+    <hr />
+
+    <h:messages globalOnly="false" />
+
+    <h2>Criar nova conta</h2>
+
+    <h:form>
+        <h:panelGrid columns="2">
+            <h:outputLabel for="name" value="Nome Completo:" />
+            <h:inputText id="name" value="#{registerMB.name}" required="true" requiredMessage="Nome é obrigatório." />
+
+            <h:outputLabel for="cpf" value="CPF:" />
+            <h:inputText id="cpf" value="#{registerMB.cpf}" required="true" requiredMessage="CPF é obrigatório." />
+
+            <h:outputLabel for="email" value="E-mail:" />
+            <h:inputText id="email" value="#{registerMB.email}" required="true" requiredMessage="E-mail é obrigatório." />
+
+            <h:outputLabel for="senha" value="Senha:" />
+            <h:inputSecret id="senha" value="#{registerMB.password}" required="true" requiredMessage="Senha é obrigatória." />
+
+            <h:outputLabel for="confirmSenha" value="Confirmar Senha:" />
+            <h:inputSecret id="confirmSenha" value="#{registerMB.confirmPassword}" required="true" requiredMessage="Confirmação de senha é obrigatória." />
+
+            <h:outputText value="" />
+            <h:commandButton value="Cadastrar" action="#{registerMB.register}" />
+        </h:panelGrid>
+    </h:form>
+
+    <br />
+    <p>Já possui cadastro? <h:link outcome="login.xhtml" value="Clique aqui para fazer login" />.</p>
+
+</h:body>
+</html>

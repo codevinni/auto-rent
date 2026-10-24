@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core">
+	  
+<h:head>
+    <title>AutoRent - Minhas Reservas e Locações</title>
+</h:head>
+<h:body>
+    <h1>AutoRent - Histórico de Reservas e Locações</h1>
+
+    <h:panelGroup rendered="#{authMB.authenticated}">
+        <p>
+            Olá, <strong>#{authMB.loggedUser.name}</strong> | 
+            <h:link outcome="dashboard.xhtml" value="Dashboard" /> | 
+            <h:link outcome="vehicles.xhtml" value="Consultar Veículos" /> | 
+            <h:link outcome="my-rentals.xhtml" value="Minhas Locações" /> | 
+            <h:form style="display:inline;">
+                <h:commandLink value="Sair" action="#{authMB.logout}" />
+            </h:form>
+        </p>
+    </h:panelGroup>
+
+    <h:panelGroup rendered="#{!authMB.authenticated}">
+        <p>Você precisa estar conectado para visualizar suas locações. <h:link outcome="login.xhtml" value="Fazer Login" /></p>
+    </h:panelGroup>
+
+    <hr />
+
+    <h:messages globalOnly="false" />
+
+    <h:panelGroup rendered="#{authMB.authenticated}">
+
+        <h2>Histórico Completo</h2>
+
+        <h:dataTable value="#{myRentalsMB.rentals}" var="r" border="1" cellpadding="5" rendered="#{not empty myRentalsMB.rentals}">
+            <h:column>
+                <f:facet name="header">Código</f:facet>
+                #{r.id}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Veículo</f:facet>
+                #{r.vehicle.brand} #{r.vehicle.model} (#{r.vehicle.licensePlate})
+            </h:column>
+            <h:column>
+                <f:facet name="header">Agência Retirada</f:facet>
+                #{r.pickupAgency.name}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Agência Devolução</f:facet>
+                #{r.returnAgency.name}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Data Retirada</f:facet>
+                #{r.pickupDate}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Devolução Prevista</f:facet>
+                #{r.expectedReturnDate}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Devolução Real</f:facet>
+                #{r.returnDate != null ? r.returnDate : '-'}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Valor Total</f:facet>
+                R$ #{r.totalPrice}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Status</f:facet>
+                <strong>#{r.status.description}</strong>
+            </h:column>
+        </h:dataTable>
+
+        <h:panelGroup rendered="#{empty myRentalsMB.rentals}">
+            <p>Você ainda não realizou nenhuma reserva ou locação.</p>
+        </h:panelGroup>
+
+        <br />
+        <p><h:link outcome="vehicles.xhtml" value="&gt;&gt; Alugar um veículo agora" /></p>
+
+    </h:panelGroup>
+
+</h:body>
+</html>

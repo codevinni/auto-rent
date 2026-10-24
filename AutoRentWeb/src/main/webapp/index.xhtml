@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>AutoRent - Início</title>
+</h:head>
+<h:body>
+    <h1>AutoRent - Sistema de Locação de Veículos</h1>
+    
+    <h:panelGroup rendered="#{authMB.authenticated}">
+        <p>Bem-vindo, <strong>#{authMB.loggedUser.name}</strong>!</p>
+        <p>
+            <h:link outcome="dashboard.xhtml" value="Meu Dashboard" /> | 
+            <h:link outcome="vehicles.xhtml" value="Consultar Veículos" /> | 
+            <h:link outcome="my-rentals.xhtml" value="Minhas Locações" /> | 
+            <h:form style="display:inline;">
+                <h:commandLink value="Sair" action="#{authMB.logout}" />
+            </h:form>
+        </p>
+    </h:panelGroup>
+
+    <h:panelGroup rendered="#{!authMB.authenticated}">
+        <p>
+            <h:link outcome="login.xhtml" value="Entrar (Login)" /> | 
+            <h:link outcome="register.xhtml" value="Cadastre-se" /> | 
+            <h:link outcome="vehicles.xhtml" value="Consultar Catálogo de Veículos" />
+        </p>
+    </h:panelGroup>
+
+    <hr />
+
+    <h:messages globalOnly="false" />
+
+    <h2>Bem-vindo à AutoRent</h2>
+    <p>Escolha um veículo, faça sua reserva online e retire na agência mais próxima de você.</p>
+
+    <h3>Status Global da Frota</h3>
+    <p>Veículos disponíveis para locação no momento: <strong>#{dashboardMB.totalAvailableFleet}</strong></p>
+
+    <p>
+        <h:link outcome="vehicles.xhtml" value="Clique aqui para ver a frota de veículos disponíveis" />
+    </p>
+
+</h:body>
+</html>
