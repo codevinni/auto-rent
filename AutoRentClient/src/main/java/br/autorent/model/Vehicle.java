@@ -20,7 +20,9 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "vehicle_table")
-public class Vehicle {
+public class Vehicle implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(generator = "vehicle_gen", strategy = GenerationType.SEQUENCE)

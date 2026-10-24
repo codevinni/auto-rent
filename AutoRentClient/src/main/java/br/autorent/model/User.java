@@ -21,7 +21,9 @@ import jakarta.persistence.Transient;
 @NamedQueries({
 	@NamedQuery(name = "User.authenticate", query = "SELECT u FROM User u WHERE u.cpf = :cpf")
 })
-public class User {
+public class User implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(generator = "user_gen", strategy = GenerationType.SEQUENCE)

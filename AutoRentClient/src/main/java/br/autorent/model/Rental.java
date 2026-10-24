@@ -10,13 +10,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "rental_table")
-public class Rental {
+public class Rental implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(generator = "rental_gen", strategy = GenerationType.SEQUENCE)
@@ -24,11 +25,11 @@ public class Rental {
 	private Long id;
 	@ManyToOne
 	private User user;
-	@OneToOne
+	@ManyToOne
 	private Vehicle vehicle;
-	@OneToOne
+	@ManyToOne
 	private Agency pickupAgency;
-	@OneToOne
+	@ManyToOne
 	private Agency returnAgency;
 	private LocalDate pickupDate;
 	private LocalDate expectedReturnDate;

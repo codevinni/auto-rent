@@ -20,6 +20,10 @@ public abstract class AbstractCrudBean<T> implements ICrudService<T> {
 		this.classObj = classObj;
 	}
 	
+	protected EntityManager getEntityManager() {
+		return entityManager;
+	}
+	
 	@Override
 	public void create(T t) {
 		entityManager.persist(t);

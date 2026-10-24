@@ -55,20 +55,45 @@ public class RentalProcessBean implements IRentalProcess {
 	}
 
 	@Override
+	public Agency getPickupAgency() {
+		return rental.getPickupAgency();
+	}
+	
+	@Override
 	public void setPickupAgency(Agency pickupAgency) {
 		rental.setPickupAgency(pickupAgency);
 	}
 
 	@Override
-	public void selectReturnAgency(Agency returnAgency) {
+	public Agency getReturnAgency() {
+		return rental.getReturnAgency();
+	}
+	
+	@Override
+	public void setReturnAgency(Agency returnAgency) {
 		rental.setReturnAgency(returnAgency);
 	}
 
+	@Override
+	public Vehicle getVehicle() {
+		return rental.getVehicle();
+	}
+	
 	@Override
 	public void setVehicle(Vehicle vehicle) {
 		rental.setVehicle(vehicle);
 	}
 
+	@Override
+	public LocalDate getPickupDate() {
+		return rental.getPickupDate();
+	}
+
+	@Override
+	public LocalDate getExpectedReturnDate() {
+		return rental.getExpectedReturnDate();
+	}
+	
 	@Override
 	public void setPeriod(LocalDate pickupDate, LocalDate expectedReturnDate) {
 		rental.setPickupDate(pickupDate);
@@ -145,9 +170,42 @@ public class RentalProcessBean implements IRentalProcess {
 	}
 
 	@Override
+	public Rental confirmReservation() {
+		
+		if (rental.getVehicle() == null || rental.getUser() == null)
+            throw new IllegalStateException("Cliente e veículo devem ser selecionados.");
+        
+        Vehicle currentVehicle = vehicleBean.searchByPrimaryKey(rental.getVehicle().getId());
+        
+        if (currentVehicle == null || currentVehicle.getStatus() != VehicleStatus.AVAILABLE) 
+            throw new IllegalStateException("O veículo selecionado não está mais disponível.");
+        
+        currentVehicle.setStatus(VehicleStatus.RESERVED);
+        currentVehicle.setAccessories(selectedAccessories);
+        currentVehicle = vehicleBean.update(currentVehicle);
+
+        rental.setVehicle(currentVehicle);
+        rental.setTotalPrice(calculateTotalValue());
+        rental.setStatus(RentalStatus.RESERVED);
+        
+        rentalBean.create(rental);
+        fleetStatus.refreshCache();
+
+        Rental confirmed = this.rental;
+        
+        cancel();
+
+        return confirmed;
+	}
+
+	@Override
+	public Rental getRental() {
+		return rental;
+	}
+	
+	@Override
 	public void cancel() {
 		rental = new Rental();
 		selectedAccessories = new ArrayList<Accessory>();
-	}
-	
+	}	
 }

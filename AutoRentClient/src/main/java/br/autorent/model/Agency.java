@@ -14,7 +14,9 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "agency_table")
-public class Agency {
+public class Agency implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(generator = "agency_gen", strategy = GenerationType.SEQUENCE)

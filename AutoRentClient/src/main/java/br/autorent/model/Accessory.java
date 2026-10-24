@@ -12,7 +12,9 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "accessory_table")
-public class Accessory {
+public class Accessory implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(generator = "accessory_gen", strategy = GenerationType.SEQUENCE)

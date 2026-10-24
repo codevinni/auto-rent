@@ -13,14 +13,21 @@ public interface IRentalProcess {
 
 	User getCustomer();
 	void setCustomer(User user);
+	Agency getPickupAgency();
 	void setPickupAgency(Agency agency);
-	void selectReturnAgency(Agency agency);
+	Agency getReturnAgency();
+	void setReturnAgency(Agency agency);
+	Vehicle getVehicle();
 	void setVehicle(Vehicle vehicle);
+	LocalDate getPickupDate();
+	LocalDate getExpectedReturnDate();
 	void setPeriod(LocalDate pickupDate, LocalDate expectedReturnDate);
 	void addAccessory(Accessory accessory);
     void removeAccessory(Accessory accessory);
     List<Accessory> getSelectedAccessories();
 	Double calculateTotalValue();
 	Rental confirmRental();
+	Rental confirmReservation();
+	Rental getRental();
 	void cancel();
-}
+}

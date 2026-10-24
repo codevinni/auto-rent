@@ -10,7 +10,9 @@ import jakarta.persistence.Embeddable;
  */
 
 @Embeddable
-public class Address {
+public class Address implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private String country, state, city, neighborhood, street, number, complement, code;
 
