@@ -1,111 +1,213 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-	  xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AutoRent - Realizar Reserva ou Locação</title>
+    <link rel="stylesheet" href="#{request.contextPath}/css/main.css" />
 </h:head>
 <h:body>
-    <h1>AutoRent - Nova Reserva / Locação</h1>
 
-    <h:panelGroup rendered="#{authMB.authenticated}">
-        <p>
-            Olá, <strong>#{authMB.loggedUser.name}</strong> | 
-            <h:link outcome="dashboard.xhtml" value="Dashboard" /> | 
-            <h:link outcome="vehicles.xhtml" value="Consultar Veículos" /> | 
-            <h:link outcome="my-rentals.xhtml" value="Minhas Locações" /> | 
-            <h:form style="display:inline;">
-                <h:commandLink value="Sair" action="#{authMB.logout}" />
-            </h:form>
-        </p>
-    </h:panelGroup>
+    <!-- Header & Navegação -->
+    <header class="site-header">
+        <div class="nav-container">
+            <h:link outcome="index.xhtml" styleClass="nav-brand">
+                <img src="#{request.contextPath}/assets/autorent_logo.png" alt="AutoRent Logo" class="nav-logo-img" />
+            </h:link>
 
-    <hr />
+            <nav class="nav-menu">
+                <h:link outcome="index.xhtml" value="Início" styleClass="nav-link" />
+                <h:link outcome="vehicles.xhtml" value="Catálogo" styleClass="nav-link" />
+                
+                <h:panelGroup rendered="#{authMB.authenticated}">
+                    <h:link outcome="dashboard.xhtml" value="Dashboard" styleClass="nav-link" />
+                    <h:link outcome="my-rentals.xhtml" value="Minhas Locações" styleClass="nav-link" />
+                </h:panelGroup>
+            </nav>
 
-    <h:messages globalOnly="false" />
+            <div class="nav-user-meta">
+                <h:panelGroup rendered="#{authMB.authenticated}">
+                    <span class="user-badge">
+                        <span>Cliente:</span>
+                        <strong>#{authMB.loggedUser.name}</strong>
+                    </span>
+                    <h:form style="display:inline;">
+                        <h:commandButton value="Sair" action="#{authMB.logout}" styleClass="btn btn-outline btn-sm" />
+                    </h:form>
+                </h:panelGroup>
 
-    <h:panelGroup rendered="#{rentalProcessWebMB.vehicle != null}">
+                <h:panelGroup rendered="#{!authMB.authenticated}" styleClass="nav-auth-buttons">
+                    <h:link outcome="login.xhtml" value="Entrar" styleClass="btn btn-outline btn-sm" />
+                    <h:link outcome="register.xhtml" value="Cadastre-se" styleClass="btn btn-primary btn-sm" />
+                </h:panelGroup>
+            </div>
+        </div>
+    </header>
 
-        <h2>1. Dados do Veículo Selecionado</h2>
-        <table border="1" cellpadding="5">
-            <tr>
-                <th>Veículo</th>
-                <td>#{rentalProcessWebMB.vehicle.brand} #{rentalProcessWebMB.vehicle.model} (#{rentalProcessWebMB.vehicle.year})</td>
-            </tr>
-            <tr>
-                <th>Categoria</th>
-                <td>#{rentalProcessWebMB.vehicle.category.description}</td>
-            </tr>
-            <tr>
-                <th>Placa</th>
-                <td>#{rentalProcessWebMB.vehicle.licensePlate}</td>
-            </tr>
-            <tr>
-                <th>Valor Base da Diária</th>
-                <td>R$ #{rentalProcessWebMB.vehicle.dailyPrice}</td>
-            </tr>
-        </table>
+    <!-- Conteúdo Principal -->
+    <main class="main-wrapper">
 
-        <br />
+        <!-- Cabeçalho -->
+        <div class="page-header">
+            <div class="page-title-group">
+                <span class="page-overline">Processo de Locação</span>
+                <h1 class="page-title">Nova Reserva ou Locação</h1>
+                <p class="page-subtitle">Configure seu período, agências de retirada e devolução e adicione opcionais.</p>
+            </div>
+        </div>
 
-        <h2>2. Configuração da Locação / Reserva</h2>
+        <!-- Mensagens JSF -->
+        <h:panelGroup layout="block" styleClass="messages-box" rendered="#{facesContext.maximumSeverity != null}">
+            <h:messages globalOnly="false" styleClass="faces-messages" />
+        </h:panelGroup>
 
-        <h:form id="rentalForm">
+        <!-- Conteúdo do Fluxo de Locação -->
+        <h:panelGroup rendered="#{rentalProcessWebMB.vehicle != null}">
+            <div class="rental-layout">
 
-            <h:panelGrid columns="2" cellpadding="5">
+                <!-- 1. Coluna Esquerda: Dados do Veículo Selecionado -->
+                <div class="rental-vehicle-summary">
+                    <div class="card-stage" style="min-height: 180px;">
+                        <div class="card-top-badges">
+                            <span class="badge-category">#{rentalProcessWebMB.vehicle.category.description}</span>
+                            <span class="status-badge status-available">
+                                <span class="status-dot"></span>
+                                Selecionado
+                            </span>
+                        </div>
+                        <img src="#{request.contextPath}/assets/#{rentalProcessWebMB.vehicle.category eq 'HATCH' ? 'hatchback.png' : (rentalProcessWebMB.vehicle.category eq 'SEDAN' ? 'seda.png' : (rentalProcessWebMB.vehicle.category eq 'SUV' ? 'suv.png' : (rentalProcessWebMB.vehicle.category eq 'PICKUP' ? 'pickup.png' : (rentalProcessWebMB.vehicle.category eq 'COUPE' ? 'cupe.png' : 'van.png'))))}" 
+                             alt="#{rentalProcessWebMB.vehicle.category.description}" 
+                             class="card-car-icon" 
+                             style="width: 170px; height: 90px;" />
+                    </div>
 
-                <h:outputLabel for="pickupAg" value="Agência de Retirada:" />
-                <h:selectOneMenu id="pickupAg" value="#{rentalProcessWebMB.pickupAgencyId}" required="true">
-                    <f:selectItems value="#{rentalProcessWebMB.agencies}" var="ag" itemLabel="#{ag.name} - #{ag.address.city}/#{ag.address.state}" itemValue="#{ag.id}" />
-                </h:selectOneMenu>
+                    <div style="padding: 1.5rem;">
+                        <span style="font-size: 0.75rem; font-weight: 700; color: var(--red-primary); letter-spacing: 0.1em; text-transform: uppercase;">
+                            #{rentalProcessWebMB.vehicle.brand}
+                        </span>
+                        <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 1.25rem;">
+                            #{rentalProcessWebMB.vehicle.model} <span style="font-size: 0.9rem; color: #888; font-weight: 500;">(#{rentalProcessWebMB.vehicle.year})</span>
+                        </h2>
 
-                <h:outputLabel for="returnAg" value="Agência de Devolução:" />
-                <h:selectOneMenu id="returnAg" value="#{rentalProcessWebMB.returnAgencyId}" required="true">
-                    <f:selectItems value="#{rentalProcessWebMB.agencies}" var="ag" itemLabel="#{ag.name} - #{ag.address.city}/#{ag.address.state}" itemValue="#{ag.id}" />
-                </h:selectOneMenu>
+                        <table class="key-value-table" style="font-size: 0.85rem;">
+                            <tr>
+                                <th>Categoria</th>
+                                <td>#{rentalProcessWebMB.vehicle.category.description}</td>
+                            </tr>
+                            <tr>
+                                <th>Placa</th>
+                                <td style="font-family: var(--font-mono);">#{rentalProcessWebMB.vehicle.licensePlate}</td>
+                            </tr>
+                            <tr>
+                                <th>Diária Base</th>
+                                <td style="font-family: var(--font-mono); font-weight: 700; color: #fff;">
+                                    R$ #{rentalProcessWebMB.vehicle.dailyPrice}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
 
-                <h:outputLabel for="pickupDate" value="Data de Retirada:" />
-                <h:inputText id="pickupDate" type="date" value="#{rentalProcessWebMB.pickupDate}" required="true">
-                    <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
-                </h:inputText>
+                <!-- 2. Coluna Direita: Formulário de Configuração -->
+                <div class="rental-config-panel">
+                    <h2 class="section-subtitle">Configuração do Contrato</h2>
 
-                <h:outputLabel for="returnDate" value="Data Prevista de Devolução:" />
-                <h:inputText id="returnDate" type="date" value="#{rentalProcessWebMB.expectedReturnDate}" required="true">
-                    <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
-                </h:inputText>
+                    <h:form id="rentalForm">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
+                            <div class="form-group">
+                                <h:outputLabel for="pickupAg" value="Agência de Retirada" styleClass="form-label" />
+                                <h:selectOneMenu id="pickupAg" value="#{rentalProcessWebMB.pickupAgencyId}" required="true" styleClass="form-select">
+                                    <f:selectItems value="#{rentalProcessWebMB.agencies}" var="ag" itemLabel="#{ag.name} - #{ag.address.city}/#{ag.address.state}" itemValue="#{ag.id}" />
+                                </h:selectOneMenu>
+                            </div>
 
-                <h:outputLabel value="Acessórios Opcionais:" />
-                <h:selectManyCheckbox value="#{rentalProcessWebMB.selectedAccessoryIds}" layout="pageDirection">
-                    <f:selectItems value="#{rentalProcessWebMB.availableAccessories}" var="acc" 
-                                   itemLabel="#{acc.name} (+ R$ #{acc.dailyPrice}/dia) - #{acc.description}" 
-                                   itemValue="#{acc.id}" />
-                </h:selectManyCheckbox>
+                            <div class="form-group">
+                                <h:outputLabel for="returnAg" value="Agência de Devolução" styleClass="form-label" />
+                                <h:selectOneMenu id="returnAg" value="#{rentalProcessWebMB.returnAgencyId}" required="true" styleClass="form-select">
+                                    <f:selectItems value="#{rentalProcessWebMB.agencies}" var="ag" itemLabel="#{ag.name} - #{ag.address.city}/#{ag.address.state}" itemValue="#{ag.id}" />
+                                </h:selectOneMenu>
+                            </div>
+                        </div>
 
-                <h:outputText value="" />
-                <h:commandButton value="Recalcular Valor Estimado" action="#{rentalProcessWebMB.calculateTotal}" />
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem;">
+                            <div class="form-group">
+                                <h:outputLabel for="pickupDate" value="Data de Retirada" styleClass="form-label" />
+                                <h:inputText id="pickupDate" type="date" value="#{rentalProcessWebMB.pickupDate}" required="true" styleClass="form-input">
+                                    <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                                </h:inputText>
+                            </div>
 
-            </h:panelGrid>
+                            <div class="form-group">
+                                <h:outputLabel for="returnDate" value="Data Prevista de Devolução" styleClass="form-label" />
+                                <h:inputText id="returnDate" type="date" value="#{rentalProcessWebMB.expectedReturnDate}" required="true" styleClass="form-input">
+                                    <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                                </h:inputText>
+                            </div>
+                        </div>
 
-            <hr />
+                        <!-- Acessórios Opcionais -->
+                        <div style="margin-bottom: 1.75rem;">
+                            <span class="form-label" style="display: block; margin-bottom: 0.5rem;">Acessórios Opcionais</span>
+                            <div style="background: #000; border: 1px solid var(--gray-line-subtle); padding: 1rem;">
+                                <h:selectManyCheckbox value="#{rentalProcessWebMB.selectedAccessoryIds}" layout="pageDirection" styleClass="accessories-checklist">
+                                    <f:selectItems value="#{rentalProcessWebMB.availableAccessories}" var="acc" 
+                                                   itemLabel="#{acc.name} (+ R$ #{acc.dailyPrice}/dia) — #{acc.description}" 
+                                                   itemValue="#{acc.id}" />
+                                </h:selectManyCheckbox>
+                            </div>
+                        </div>
 
-            <h3>Valor Total Estimado: R$ #{rentalProcessWebMB.estimatedTotal}</h3>
+                        <div style="display: flex; justify-content: flex-end; margin-bottom: 1.5rem;">
+                            <h:commandButton value="↻ Recalcular Valor Estimado" action="#{rentalProcessWebMB.calculateTotal}" styleClass="btn btn-secondary btn-sm" />
+                        </div>
 
-            <p>
-                <h:commandButton value="Confirmar como Reserva" action="#{rentalProcessWebMB.confirm(true)}" />
-                 
-                <h:commandButton value="Confirmar Locação Imediata" action="#{rentalProcessWebMB.confirm(false)}" />
-                 
-                <h:commandButton value="Cancelar" action="#{rentalProcessWebMB.cancel}" immediate="true" />
-            </p>
+                        <!-- Bloco de Valor Total Estimado -->
+                        <div class="rental-total-block">
+                            <div>
+                                <span class="total-title">Total Estimado da Locação</span>
+                                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Cálculo baseado no período e acessórios selecionados</p>
+                            </div>
+                            <div class="total-amount">
+                                R$ #{rentalProcessWebMB.estimatedTotal}
+                            </div>
+                        </div>
 
-        </h:form>
+                        <!-- Botões de Ação -->
+                        <div style="display: flex; gap: 0.85rem; flex-wrap: wrap;">
+                            <h:commandButton value="Confirmar como Reserva" action="#{rentalProcessWebMB.confirm(true)}" styleClass="btn btn-outline-red" />
+                            <h:commandButton value="Confirmar Locação Imediata" action="#{rentalProcessWebMB.confirm(false)}" styleClass="btn btn-primary" />
+                            <h:commandButton value="Cancelar" action="#{rentalProcessWebMB.cancel}" immediate="true" styleClass="btn btn-secondary" />
+                        </div>
 
-    </h:panelGroup>
+                    </h:form>
+                </div>
 
-    <h:panelGroup rendered="#{rentalProcessWebMB.vehicle == null}">
-        <p>Nenhum veículo selecionado para locação.</p>
-        <p><h:link outcome="vehicles.xhtml" value="Clique aqui para selecionar um veículo" /></p>
-    </h:panelGroup>
+            </div>
+        </h:panelGroup>
+
+        <!-- Caso Nenhum Veículo Esteja Selecionado -->
+        <h:panelGroup rendered="#{rentalProcessWebMB.vehicle == null}">
+            <div class="empty-state">
+                <div class="empty-state-icon">🚘</div>
+                <h2 class="empty-state-title">Nenhum Veículo Selecionado</h2>
+                <p class="empty-state-text">Para iniciar uma locação ou reserva, selecione previamente um dos veículos disponíveis em nosso catálogo.</p>
+                <h:link outcome="vehicles.xhtml" value="Ir para o Catálogo de Veículos" styleClass="btn btn-primary" />
+            </div>
+        </h:panelGroup>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <img src="#{request.contextPath}/assets/autorent_logo.png" alt="AutoRent" style="height: 28px; width: auto;" />
+            </div>
+            <p class="footer-copy">© 2026 AutoRent Sistema de Locação. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
 </h:body>
 </html>

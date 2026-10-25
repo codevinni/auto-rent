@@ -1,85 +1,165 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-	  xmlns:f="http://java.sun.com/jsf/core">
-	  
+      xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AutoRent - Minhas Reservas e Locações</title>
+    <link rel="stylesheet" href="#{request.contextPath}/css/main.css" />
 </h:head>
 <h:body>
-    <h1>AutoRent - Histórico de Reservas e Locações</h1>
 
-    <h:panelGroup rendered="#{authMB.authenticated}">
-        <p>
-            Olá, <strong>#{authMB.loggedUser.name}</strong> | 
-            <h:link outcome="dashboard.xhtml" value="Dashboard" /> | 
-            <h:link outcome="vehicles.xhtml" value="Consultar Veículos" /> | 
-            <h:link outcome="my-rentals.xhtml" value="Minhas Locações" /> | 
-            <h:form style="display:inline;">
-                <h:commandLink value="Sair" action="#{authMB.logout}" />
-            </h:form>
-        </p>
-    </h:panelGroup>
+    <!-- Header & Navegação -->
+    <header class="site-header">
+        <div class="nav-container">
+            <h:link outcome="index.xhtml" styleClass="nav-brand">
+                <img src="#{request.contextPath}/assets/autorent_logo.png" alt="AutoRent Logo" class="nav-logo-img" />
+            </h:link>
 
-    <h:panelGroup rendered="#{!authMB.authenticated}">
-        <p>Você precisa estar conectado para visualizar suas locações. <h:link outcome="login.xhtml" value="Fazer Login" /></p>
-    </h:panelGroup>
+            <nav class="nav-menu">
+                <h:link outcome="index.xhtml" value="Início" styleClass="nav-link" />
+                <h:link outcome="vehicles.xhtml" value="Catálogo" styleClass="nav-link" />
+                
+                <h:panelGroup rendered="#{authMB.authenticated}">
+                    <h:link outcome="dashboard.xhtml" value="Dashboard" styleClass="nav-link" />
+                    <h:link outcome="my-rentals.xhtml" value="Minhas Locações" styleClass="nav-link active" />
+                </h:panelGroup>
+            </nav>
 
-    <hr />
+            <div class="nav-user-meta">
+                <h:panelGroup rendered="#{authMB.authenticated}">
+                    <span class="user-badge">
+                        <span>Olá,</span>
+                        <strong>#{authMB.loggedUser.name}</strong>
+                    </span>
+                    <h:form style="display:inline;">
+                        <h:commandButton value="Sair" action="#{authMB.logout}" styleClass="btn btn-outline btn-sm" />
+                    </h:form>
+                </h:panelGroup>
 
-    <h:messages globalOnly="false" />
+                <h:panelGroup rendered="#{!authMB.authenticated}" styleClass="nav-auth-buttons">
+                    <h:link outcome="login.xhtml" value="Entrar" styleClass="btn btn-outline btn-sm" />
+                    <h:link outcome="register.xhtml" value="Cadastre-se" styleClass="btn btn-primary btn-sm" />
+                </h:panelGroup>
+            </div>
+        </div>
+    </header>
 
-    <h:panelGroup rendered="#{authMB.authenticated}">
+    <!-- Conteúdo Principal -->
+    <main class="main-wrapper">
 
-        <h2>Histórico Completo</h2>
+        <!-- Cabeçalho -->
+        <div class="page-header">
+            <div class="page-title-group">
+                <span class="page-overline">Histórico do Cliente</span>
+                <h1 class="page-title">Minhas Reservas e Locações</h1>
+                <p class="page-subtitle">Acompanhe todos os seus contratos, datas de devolução e extrato de valores.</p>
+            </div>
 
-        <h:dataTable value="#{myRentalsMB.rentals}" var="r" border="1" cellpadding="5" rendered="#{not empty myRentalsMB.rentals}">
-            <h:column>
-                <f:facet name="header">Código</f:facet>
-                #{r.id}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Veículo</f:facet>
-                #{r.vehicle.brand} #{r.vehicle.model} (#{r.vehicle.licensePlate})
-            </h:column>
-            <h:column>
-                <f:facet name="header">Agência Retirada</f:facet>
-                #{r.pickupAgency.name}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Agência Devolução</f:facet>
-                #{r.returnAgency.name}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Data Retirada</f:facet>
-                #{r.pickupDate}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Devolução Prevista</f:facet>
-                #{r.expectedReturnDate}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Devolução Real</f:facet>
-                #{r.returnDate != null ? r.returnDate : '-'}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Valor Total</f:facet>
-                R$ #{r.totalPrice}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Status</f:facet>
-                <strong>#{r.status.description}</strong>
-            </h:column>
-        </h:dataTable>
+            <div>
+                <h:link outcome="vehicles.xhtml" value="+ Alugar Novo Veículo" styleClass="btn btn-primary btn-sm" />
+            </div>
+        </div>
 
-        <h:panelGroup rendered="#{empty myRentalsMB.rentals}">
-            <p>Você ainda não realizou nenhuma reserva ou locação.</p>
+        <!-- Mensagens JSF -->
+        <h:panelGroup layout="block" styleClass="messages-box" rendered="#{facesContext.maximumSeverity != null}">
+            <h:messages globalOnly="false" styleClass="faces-messages" />
         </h:panelGroup>
 
-        <br />
-        <p><h:link outcome="vehicles.xhtml" value="&gt;&gt; Alugar um veículo agora" /></p>
+        <!-- Se Autenticado -->
+        <h:panelGroup rendered="#{authMB.authenticated}">
 
-    </h:panelGroup>
+            <h:panelGroup rendered="#{not empty myRentalsMB.rentals}">
+                <div class="table-responsive">
+                    <h:dataTable value="#{myRentalsMB.rentals}" var="r" styleClass="dark-table">
+                        <h:column>
+                            <f:facet name="header">Contrato</f:facet>
+                            <span style="font-family: var(--font-mono); font-weight: 700; color: #fff;">
+                                ##{r.id}
+                            </span>
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Veículo</f:facet>
+                            <strong>#{r.vehicle.brand} #{r.vehicle.model}</strong>
+                            <span style="display: block; font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">
+                                #{r.vehicle.licensePlate}
+                            </span>
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Retirada</f:facet>
+                            <span style="font-family: var(--font-mono);">#{r.pickupDate}</span>
+                            <span style="display: block; font-size: 0.75rem; color: var(--text-muted);">
+                                #{r.pickupAgency.name}
+                            </span>
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Prev. Devolução</f:facet>
+                            <span style="font-family: var(--font-mono);">#{r.expectedReturnDate}</span>
+                            <span style="display: block; font-size: 0.75rem; color: var(--text-muted);">
+                                #{r.returnAgency.name}
+                            </span>
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Devolução Real</f:facet>
+                            <span style="font-family: var(--font-mono); color: #{r.returnDate != null ? '#4ade80' : 'var(--text-muted)'};">
+                                #{r.returnDate != null ? r.returnDate : 'Em Aberto'}
+                            </span>
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Valor Total</f:facet>
+                            <span style="font-family: var(--font-mono); font-weight: 800; color: #fff;">
+                                R$ #{r.totalPrice}
+                            </span>
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Status</f:facet>
+                            <span class="status-badge status-#{r.status eq 'COMPLETED' ? 'available' : (r.status eq 'IN_PROGRESS' ? 'rented' : (r.status eq 'RESERVED' ? 'reserved' : 'maintenance'))}">
+                                <span class="status-dot"></span>
+                                #{r.status.description}
+                            </span>
+                        </h:column>
+                    </h:dataTable>
+                </div>
+            </h:panelGroup>
+
+            <!-- Estado Vazio -->
+            <h:panelGroup layout="block" styleClass="empty-state" rendered="#{empty myRentalsMB.rentals}">
+                <div class="empty-state-icon">📋</div>
+                <h3 class="empty-state-title">Nenhuma locação registrada</h3>
+                <p class="empty-state-text">Você ainda não realizou nenhuma reserva ou locação em nossa plataforma.</p>
+                <h:link outcome="vehicles.xhtml" value="Alugar um Veículo Agora" styleClass="btn btn-primary" />
+            </h:panelGroup>
+
+        </h:panelGroup>
+
+        <!-- Caso Não Autenticado -->
+        <h:panelGroup rendered="#{!authMB.authenticated}">
+            <div class="empty-state">
+                <div class="empty-state-icon">🔒</div>
+                <h2 class="empty-state-title">Acesso Restrito</h2>
+                <p class="empty-state-text">Você precisa estar conectado à sua conta para visualizar seu histórico de locações.</p>
+                <h:link outcome="login.xhtml" value="Fazer Login" styleClass="btn btn-primary" />
+            </div>
+        </h:panelGroup>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <img src="#{request.contextPath}/assets/autorent_logo.png" alt="AutoRent" style="height: 28px; width: auto;" />
+            </div>
+            <p class="footer-copy">© 2026 AutoRent Sistema de Locação. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
 </h:body>
 </html>

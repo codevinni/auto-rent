@@ -1,49 +1,137 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-	  xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AutoRent - Cadastro de Cliente</title>
+    <link rel="stylesheet" href="#{request.contextPath}/css/main.css" />
 </h:head>
 <h:body>
-    <h1>AutoRent - Cadastro de Cliente</h1>
 
-    <p>
-        <h:link outcome="index.xhtml" value="Início" /> | 
-        <h:link outcome="login.xhtml" value="Já tenho conta (Login)" /> | 
-        <h:link outcome="vehicles.xhtml" value="Consultar Veículos" />
-    </p>
+    <!-- Header & Navegação -->
+    <header class="site-header">
+        <div class="nav-container">
+            <h:link outcome="index.xhtml" styleClass="nav-brand">
+                <img src="#{request.contextPath}/assets/autorent_logo.png" alt="AutoRent Logo" class="nav-logo-img" />
+            </h:link>
 
-    <hr />
+            <nav class="nav-menu">
+                <h:link outcome="index.xhtml" value="Início" styleClass="nav-link" />
+                <h:link outcome="vehicles.xhtml" value="Catálogo" styleClass="nav-link" />
+            </nav>
 
-    <h:messages globalOnly="false" />
+            <div class="nav-user-meta">
+                <div class="nav-auth-buttons">
+                    <h:link outcome="login.xhtml" value="Já tenho conta" styleClass="btn btn-outline btn-sm" />
+                </div>
+            </div>
+        </div>
+    </header>
 
-    <h2>Criar nova conta</h2>
+    <!-- Conteúdo Principal -->
+    <main class="main-wrapper">
+        <div class="auth-wrapper" style="max-width: 520px;">
+            <div class="auth-card">
+                
+                <div class="auth-header">
+                    <img src="#{request.contextPath}/assets/autorent_logo.png" alt="AutoRent" class="auth-logo" />
+                    <h1 class="auth-title">Criar Nova Conta</h1>
+                    <p class="auth-subtitle">Cadastre-se para alugar e reservar veículos em poucos passos</p>
+                </div>
 
-    <h:form>
-        <h:panelGrid columns="2">
-            <h:outputLabel for="name" value="Nome Completo:" />
-            <h:inputText id="name" value="#{registerMB.name}" required="true" requiredMessage="Nome é obrigatório." />
+                <!-- Mensagens JSF -->
+                <h:panelGroup layout="block" styleClass="messages-box" rendered="#{facesContext.maximumSeverity != null}">
+                    <h:messages globalOnly="false" styleClass="faces-messages" />
+                </h:panelGroup>
 
-            <h:outputLabel for="cpf" value="CPF:" />
-            <h:inputText id="cpf" value="#{registerMB.cpf}" required="true" requiredMessage="CPF é obrigatório." />
+                <!-- Formulário de Cadastro -->
+                <h:form id="registerForm">
+                    <div class="form-group">
+                        <h:outputLabel for="name" styleClass="form-label">
+                            Nome Completo <span class="required">*</span>
+                        </h:outputLabel>
+                        <h:inputText id="name" 
+                                     value="#{registerMB.name}" 
+                                     required="true" 
+                                     requiredMessage="Nome é obrigatório." 
+                                     styleClass="form-input" 
+                                     placeholder="Seu nome completo" />
+                    </div>
 
-            <h:outputLabel for="email" value="E-mail:" />
-            <h:inputText id="email" value="#{registerMB.email}" required="true" requiredMessage="E-mail é obrigatório." />
+                    <div class="form-group">
+                        <h:outputLabel for="cpf" styleClass="form-label">
+                            CPF <span class="required">*</span>
+                        </h:outputLabel>
+                        <h:inputText id="cpf" 
+                                     value="#{registerMB.cpf}" 
+                                     required="true" 
+                                     requiredMessage="CPF é obrigatório." 
+                                     styleClass="form-input" 
+                                     placeholder="000.000.000-00" />
+                    </div>
 
-            <h:outputLabel for="senha" value="Senha:" />
-            <h:inputSecret id="senha" value="#{registerMB.password}" required="true" requiredMessage="Senha é obrigatória." />
+                    <div class="form-group">
+                        <h:outputLabel for="email" styleClass="form-label">
+                            E-mail <span class="required">*</span>
+                        </h:outputLabel>
+                        <h:inputText id="email" 
+                                     value="#{registerMB.email}" 
+                                     required="true" 
+                                     requiredMessage="E-mail é obrigatório." 
+                                     styleClass="form-input" 
+                                     placeholder="seu.email@exemplo.com" />
+                    </div>
 
-            <h:outputLabel for="confirmSenha" value="Confirmar Senha:" />
-            <h:inputSecret id="confirmSenha" value="#{registerMB.confirmPassword}" required="true" requiredMessage="Confirmação de senha é obrigatória." />
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <h:outputLabel for="senha" styleClass="form-label">
+                                Senha <span class="required">*</span>
+                            </h:outputLabel>
+                            <h:inputSecret id="senha" 
+                                           value="#{registerMB.password}" 
+                                           required="true" 
+                                           requiredMessage="Senha é obrigatória." 
+                                           styleClass="form-input" 
+                                           placeholder="••••••••" />
+                        </div>
 
-            <h:outputText value="" />
-            <h:commandButton value="Cadastrar" action="#{registerMB.register}" />
-        </h:panelGrid>
-    </h:form>
+                        <div class="form-group">
+                            <h:outputLabel for="confirmSenha" styleClass="form-label">
+                                Confirmar Senha <span class="required">*</span>
+                            </h:outputLabel>
+                            <h:inputSecret id="confirmSenha" 
+                                           value="#{registerMB.confirmPassword}" 
+                                           required="true" 
+                                           requiredMessage="Confirmação de senha é obrigatória." 
+                                           styleClass="form-input" 
+                                           placeholder="••••••••" />
+                        </div>
+                    </div>
 
-    <br />
-    <p>Já possui cadastro? <h:link outcome="login.xhtml" value="Clique aqui para fazer login" />.</p>
+                    <div class="form-actions">
+                        <h:commandButton value="Finalizar Cadastro" action="#{registerMB.register}" styleClass="btn btn-primary btn-block" />
+                    </div>
+                </h:form>
+
+                <div class="auth-footer">
+                    Já possui uma conta ativa? <h:link outcome="login.xhtml" value="Clique aqui para fazer login" />.
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <img src="#{request.contextPath}/assets/autorent_logo.png" alt="AutoRent" style="height: 28px; width: auto;" />
+            </div>
+            <p class="footer-copy">© 2026 AutoRent Sistema de Locação. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
 </h:body>
 </html>

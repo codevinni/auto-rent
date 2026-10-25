@@ -1,148 +1,273 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-	  xmlns:f="http://java.sun.com/jsf/core">
-	  
+      xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
-    <title>AutoRent - Dashboard</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AutoRent - Painel do Cliente</title>
+    <link rel="stylesheet" href="#{request.contextPath}/css/main.css" />
 </h:head>
 <h:body>
-    <h1>AutoRent - Painel do Cliente</h1>
 
-    <h:panelGroup rendered="#{authMB.authenticated}">
-        <p>
-            Olá, <strong>#{authMB.loggedUser.name}</strong> (CPF: #{authMB.loggedUser.cpf}) | 
-            <h:link outcome="dashboard.xhtml" value="Dashboard" /> | 
-            <h:link outcome="vehicles.xhtml" value="Consultar Veículos" /> | 
-            <h:link outcome="my-rentals.xhtml" value="Minhas Locações" /> | 
-            <h:form style="display:inline;">
-                <h:commandLink value="Sair" action="#{authMB.logout}" />
-            </h:form>
-        </p>
-    </h:panelGroup>
+    <!-- Header & Navegação -->
+    <header class="site-header">
+        <div class="nav-container">
+            <h:link outcome="index.xhtml" styleClass="nav-brand">
+                <img src="#{request.contextPath}/assets/autorent_logo.png" alt="AutoRent Logo" class="nav-logo-img" />
+            </h:link>
 
-    <h:panelGroup rendered="#{!authMB.authenticated}">
-        <p>Você precisa estar conectado para acessar o Dashboard. <h:link outcome="login.xhtml" value="Fazer Login" /></p>
-    </h:panelGroup>
+            <nav class="nav-menu">
+                <h:link outcome="index.xhtml" value="Início" styleClass="nav-link" />
+                <h:link outcome="vehicles.xhtml" value="Catálogo" styleClass="nav-link" />
+                
+                <h:panelGroup rendered="#{authMB.authenticated}">
+                    <h:link outcome="dashboard.xhtml" value="Dashboard" styleClass="nav-link active" />
+                    <h:link outcome="my-rentals.xhtml" value="Minhas Locações" styleClass="nav-link" />
+                </h:panelGroup>
+            </nav>
 
-    <hr />
+            <div class="nav-user-meta">
+                <h:panelGroup rendered="#{authMB.authenticated}">
+                    <span class="user-badge">
+                        <span>Olá,</span>
+                        <strong>#{authMB.loggedUser.name}</strong>
+                    </span>
+                    <h:form style="display:inline;">
+                        <h:commandButton value="Sair" action="#{authMB.logout}" styleClass="btn btn-outline btn-sm" />
+                    </h:form>
+                </h:panelGroup>
 
-    <h:messages globalOnly="false" />
+                <h:panelGroup rendered="#{!authMB.authenticated}" styleClass="nav-auth-buttons">
+                    <h:link outcome="login.xhtml" value="Entrar" styleClass="btn btn-outline btn-sm" />
+                    <h:link outcome="register.xhtml" value="Cadastre-se" styleClass="btn btn-primary btn-sm" />
+                </h:panelGroup>
+            </div>
+        </div>
+    </header>
 
-    <h:panelGroup rendered="#{authMB.authenticated}">
+    <!-- Conteúdo Principal -->
+    <main class="main-wrapper">
 
-        <h2>Veículo Atualmente Alugado</h2>
-        <h:panelGroup rendered="#{dashboardMB.hasCurrentRented()}">
-            <table border="1">
-                <tr>
-                    <th>Veículo</th>
-                    <td>#{dashboardMB.currentRented.vehicle.brand} #{dashboardMB.currentRented.vehicle.model} (#{dashboardMB.currentRented.vehicle.licensePlate})</td>
-                </tr>
-                <tr>
-                    <th>Agência de Retirada</th>
-                    <td>#{dashboardMB.currentRented.pickupAgency.name}</td>
-                </tr>
-                <tr>
-                    <th>Agência de Devolução</th>
-                    <td>#{dashboardMB.currentRented.returnAgency.name}</td>
-                </tr>
-                <tr>
-                    <th>Data de Retirada</th>
-                    <td>#{dashboardMB.currentRented.pickupDate}</td>
-                </tr>
-                <tr>
-                    <th>Devolução Prevista</th>
-                    <td>#{dashboardMB.currentRented.expectedReturnDate}</td>
-                </tr>
-                <tr>
-                    <th>Valor Total</th>
-                    <td>R$ #{dashboardMB.currentRented.totalPrice}</td>
-                </tr>
-                <tr>
-                    <th>Status</th>
-                    <td><strong>#{dashboardMB.currentRented.status.description}</strong></td>
-                </tr>
-            </table>
+        <h:panelGroup rendered="#{authMB.authenticated}">
+            <!-- Cabeçalho do Dashboard -->
+            <div class="page-header">
+                <div class="page-title-group">
+                    <span class="page-overline">Área do Cliente</span>
+                    <h1 class="page-title">Painel Geral</h1>
+                    <p class="page-subtitle">
+                        Bem-vindo, <strong>#{authMB.loggedUser.name}</strong> · CPF: <span style="font-family: var(--font-mono);">#{authMB.loggedUser.cpf}</span>
+                    </p>
+                </div>
+
+                <div style="display: flex; gap: 0.75rem;">
+                    <h:link outcome="vehicles.xhtml" value="+ Nova Locação" styleClass="btn btn-primary btn-sm" />
+                    <h:link outcome="my-rentals.xhtml" value="Histórico Completo" styleClass="btn btn-outline btn-sm" />
+                </div>
+            </div>
+
+            <!-- Mensagens JSF -->
+            <h:panelGroup layout="block" styleClass="messages-box" rendered="#{facesContext.maximumSeverity != null}">
+                <h:messages globalOnly="false" styleClass="faces-messages" />
+            </h:panelGroup>
+
+            <!-- 1. Veículo Atualmente em Uso -->
+            <div style="margin-bottom: 3rem;">
+                <h2 class="section-subtitle">Veículo Atualmente em Posse</h2>
+
+                <h:panelGroup rendered="#{dashboardMB.hasCurrentRented()}">
+                    <div style="background: var(--bg-surface); border: 1px solid var(--gray-line-medium); padding: 1.75rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+                            <div>
+                                <span style="font-size: 0.75rem; font-weight: 700; color: var(--red-primary); text-transform: uppercase; letter-spacing: 0.1em;">Contrato em Andamento</span>
+                                <h3 style="font-size: 1.5rem; font-weight: 800; color: #fff;">
+                                    #{dashboardMB.currentRented.vehicle.brand} #{dashboardMB.currentRented.vehicle.model}
+                                </h3>
+                            </div>
+                            <span class="status-badge status-available">
+                                <span class="status-dot"></span>
+                                #{dashboardMB.currentRented.status.description}
+                            </span>
+                        </div>
+
+                        <div class="table-responsive" style="margin-bottom: 0;">
+                            <table class="key-value-table">
+                                <tr>
+                                    <th>Placa do Veículo</th>
+                                    <td style="font-family: var(--font-mono);">#{dashboardMB.currentRented.vehicle.licensePlate}</td>
+                                </tr>
+                                <tr>
+                                    <th>Agência de Retirada</th>
+                                    <td>#{dashboardMB.currentRented.pickupAgency.name}</td>
+                                </tr>
+                                <tr>
+                                    <th>Agência de Devolução</th>
+                                    <td>#{dashboardMB.currentRented.returnAgency.name}</td>
+                                </tr>
+                                <tr>
+                                    <th>Data de Retirada</th>
+                                    <td style="font-family: var(--font-mono);">#{dashboardMB.currentRented.pickupDate}</td>
+                                </tr>
+                                <tr>
+                                    <th>Devolução Prevista</th>
+                                    <td style="font-family: var(--font-mono); color: #facc15;">#{dashboardMB.currentRented.expectedReturnDate}</td>
+                                </tr>
+                                <tr>
+                                    <th>Valor Total Contratado</th>
+                                    <td style="font-family: var(--font-mono); font-size: 1.15rem; font-weight: 800; color: var(--red-primary);">
+                                        R$ #{dashboardMB.currentRented.totalPrice}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{!dashboardMB.hasCurrentRented()}">
+                    <div class="empty-state" style="padding: 2.5rem 1.5rem; margin: 0;">
+                        <div class="empty-state-icon" style="font-size: 1.8rem; margin-bottom: 0.5rem;">🔑</div>
+                        <h3 class="empty-state-title" style="font-size: 1rem;">Nenhum veículo em posse no momento</h3>
+                        <p class="empty-state-text" style="font-size: 0.85rem; margin-bottom: 1rem;">Você não possui nenhuma locação com veículo em trânsito atualmente.</p>
+                        <h:link outcome="vehicles.xhtml" value="Explorar Veículos Disponíveis" styleClass="btn btn-outline-red btn-sm" />
+                    </div>
+                </h:panelGroup>
+            </div>
+
+            <!-- 2. Locações Ativas (Em Andamento) -->
+            <div style="margin-bottom: 3rem;">
+                <h2 class="section-subtitle">Minhas Locações Ativas</h2>
+
+                <h:panelGroup rendered="#{not empty dashboardMB.activeRentals}">
+                    <div class="table-responsive">
+                        <h:dataTable value="#{dashboardMB.activeRentals}" var="loc" styleClass="dark-table">
+                            <h:column>
+                                <f:facet name="header">Código</f:facet>
+                                <span style="font-family: var(--font-mono); font-weight: 700;">##{loc.id}</span>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Veículo</f:facet>
+                                <strong>#{loc.vehicle.brand} #{loc.vehicle.model}</strong>
+                                <span style="display: block; font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">
+                                    #{loc.vehicle.licensePlate}
+                                </span>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Retirada</f:facet>
+                                <span style="font-family: var(--font-mono);">#{loc.pickupDate}</span>
+                                <span style="display: block; font-size: 0.75rem; color: var(--text-muted);">
+                                    #{loc.pickupAgency.name}
+                                </span>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Prev. Devolução</f:facet>
+                                <span style="font-family: var(--font-mono);">#{loc.expectedReturnDate}</span>
+                                <span style="display: block; font-size: 0.75rem; color: var(--text-muted);">
+                                    #{loc.returnAgency.name}
+                                </span>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Valor</f:facet>
+                                <span style="font-family: var(--font-mono); font-weight: 700; color: #fff;">
+                                    R$ #{loc.totalPrice}
+                                </span>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Status</f:facet>
+                                <span class="status-badge status-available">
+                                    <span class="status-dot"></span>
+                                    #{loc.status.description}
+                                </span>
+                            </h:column>
+                        </h:dataTable>
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{empty dashboardMB.activeRentals}">
+                    <div class="empty-state" style="padding: 2rem; margin: 0;">
+                        <p class="empty-state-text" style="margin: 0;">Nenhuma locação ativa no momento.</p>
+                    </div>
+                </h:panelGroup>
+            </div>
+
+            <!-- 3. Minhas Reservas -->
+            <div style="margin-bottom: 2.5rem;">
+                <h2 class="section-subtitle">Minhas Reservas Agendadas</h2>
+
+                <h:panelGroup rendered="#{not empty dashboardMB.reservations}">
+                    <div class="table-responsive">
+                        <h:dataTable value="#{dashboardMB.reservations}" var="res" styleClass="dark-table">
+                            <h:column>
+                                <f:facet name="header">Código</f:facet>
+                                <span style="font-family: var(--font-mono); font-weight: 700;">##{res.id}</span>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Veículo</f:facet>
+                                <strong>#{res.vehicle.brand} #{res.vehicle.model}</strong>
+                                <span style="display: block; font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">
+                                    #{res.vehicle.licensePlate}
+                                </span>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Retirada Agendada</f:facet>
+                                <span style="font-family: var(--font-mono);">#{res.pickupDate}</span>
+                                <span style="display: block; font-size: 0.75rem; color: var(--text-muted);">
+                                    #{res.pickupAgency.name}
+                                </span>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Devolução Prevista</f:facet>
+                                <span style="font-family: var(--font-mono);">#{res.expectedReturnDate}</span>
+                                <span style="display: block; font-size: 0.75rem; color: var(--text-muted);">
+                                    #{res.returnAgency.name}
+                                </span>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Valor Estimado</f:facet>
+                                <span style="font-family: var(--font-mono); font-weight: 700; color: #fff;">
+                                    R$ #{res.totalPrice}
+                                </span>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Status</f:facet>
+                                <span class="status-badge status-reserved">
+                                    <span class="status-dot"></span>
+                                    #{res.status.description}
+                                </span>
+                            </h:column>
+                        </h:dataTable>
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{empty dashboardMB.reservations}">
+                    <div class="empty-state" style="padding: 2rem; margin: 0;">
+                        <p class="empty-state-text" style="margin: 0;">Nenhuma reserva futura agendada.</p>
+                    </div>
+                </h:panelGroup>
+            </div>
+
         </h:panelGroup>
-        <h:panelGroup rendered="#{!dashboardMB.hasCurrentRented()}">
-            <p>Você não possui nenhum veículo alugado em andamento no momento.</p>
+
+        <!-- Caso não esteja autenticado -->
+        <h:panelGroup rendered="#{!authMB.authenticated}">
+            <div class="empty-state" style="margin-top: 3rem;">
+                <div class="empty-state-icon">🔒</div>
+                <h2 class="empty-state-title">Acesso Restrito</h2>
+                <p class="empty-state-text">Você precisa estar conectado à sua conta para visualizar o painel do cliente.</p>
+                <h:link outcome="login.xhtml" value="Fazer Login Agora" styleClass="btn btn-primary" />
+            </div>
         </h:panelGroup>
 
-        <hr />
+    </main>
 
-        <h2>Minhas Locações Ativas (Em Andamento)</h2>
-        <h:dataTable value="#{dashboardMB.activeRentals}" var="loc" border="1" cellpadding="5" rendered="#{not empty dashboardMB.activeRentals}">
-            <h:column>
-                <f:facet name="header">Código</f:facet>
-                #{loc.id}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Veículo</f:facet>
-                #{loc.vehicle.brand} #{loc.vehicle.model} (#{loc.vehicle.licensePlate})
-            </h:column>
-            <h:column>
-                <f:facet name="header">Retirada</f:facet>
-                #{loc.pickupDate} (#{loc.pickupAgency.name})
-            </h:column>
-            <h:column>
-                <f:facet name="header">Prev. Devolução</f:facet>
-                #{loc.expectedReturnDate} (#{loc.returnAgency.name})
-            </h:column>
-            <h:column>
-                <f:facet name="header">Valor</f:facet>
-                R$ #{loc.totalPrice}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Status</f:facet>
-                #{loc.status.description}
-            </h:column>
-        </h:dataTable>
-        <h:panelGroup rendered="#{empty dashboardMB.activeRentals}">
-            <p>Nenhuma locação ativa no momento.</p>
-        </h:panelGroup>
-
-        <hr />
-
-        <h2>Minhas Reservas</h2>
-        <h:dataTable value="#{dashboardMB.reservations}" var="res" border="1" cellpadding="5" rendered="#{not empty dashboardMB.reservations}">
-            <h:column>
-                <f:facet name="header">Código</f:facet>
-                #{res.id}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Veículo</f:facet>
-                #{res.vehicle.brand} #{res.vehicle.model} (#{res.vehicle.licensePlate})
-            </h:column>
-            <h:column>
-                <f:facet name="header">Data Retirada</f:facet>
-                #{res.pickupDate} (#{res.pickupAgency.name})
-            </h:column>
-            <h:column>
-                <f:facet name="header">Devolução Prevista</f:facet>
-                #{res.expectedReturnDate} (#{res.returnAgency.name})
-            </h:column>
-            <h:column>
-                <f:facet name="header">Valor Estimado</f:facet>
-                R$ #{res.totalPrice}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Status</f:facet>
-                #{res.status.description}
-            </h:column>
-        </h:dataTable>
-        <h:panelGroup rendered="#{empty dashboardMB.reservations}">
-            <p>Nenhuma reserva futura no momento.</p>
-        </h:panelGroup>
-
-        <hr />
-
-        <h3>Ações Rápidas</h3>
-        <p>
-            <h:link outcome="vehicles.xhtml" value="&gt;&gt; Alugar ou Reservar um Novo Veículo" /> | 
-            <h:link outcome="my-rentals.xhtml" value="&gt;&gt; Ver Histórico Completo de Locações" />
-        </p>
-
-    </h:panelGroup>
+    <!-- Rodapé -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <img src="#{request.contextPath}/assets/autorent_logo.png" alt="AutoRent" style="height: 28px; width: auto;" />
+            </div>
+            <p class="footer-copy">© 2026 AutoRent Sistema de Locação. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
 </h:body>
 </html>

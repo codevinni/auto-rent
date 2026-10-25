@@ -1,40 +1,95 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-	  xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AutoRent - Login</title>
+    <link rel="stylesheet" href="#{request.contextPath}/css/main.css" />
 </h:head>
 <h:body>
-    <h1>AutoRent - Acesso do Cliente</h1>
 
-    <p>
-        <h:link outcome="index.xhtml" value="Início" /> | 
-        <h:link outcome="vehicles.xhtml" value="Consultar Veículos" /> | 
-        <h:link outcome="register.xhtml" value="Cadastre-se" />
-    </p>
+    <!-- Header & Navegação -->
+    <header class="site-header">
+        <div class="nav-container">
+            <h:link outcome="index.xhtml" styleClass="nav-brand">
+                <img src="#{request.contextPath}/assets/autorent_logo.png" alt="AutoRent Logo" class="nav-logo-img" />
+            </h:link>
 
-    <hr />
+            <nav class="nav-menu">
+                <h:link outcome="index.xhtml" value="Início" styleClass="nav-link" />
+                <h:link outcome="vehicles.xhtml" value="Catálogo" styleClass="nav-link" />
+            </nav>
 
-    <h:messages globalOnly="false" />
+            <div class="nav-user-meta">
+                <div class="nav-auth-buttons">
+                    <h:link outcome="register.xhtml" value="Criar Conta" styleClass="btn btn-outline btn-sm" />
+                </div>
+            </div>
+        </div>
+    </header>
 
-    <h2>Entrar na sua conta</h2>
+    <!-- Conteúdo Principal -->
+    <main class="main-wrapper">
+        <div class="auth-wrapper">
+            <div class="auth-card">
+                
+                <div class="auth-header">
+                    <img src="#{request.contextPath}/assets/autorent_logo.png" alt="AutoRent" class="auth-logo" />
+                    <h1 class="auth-title">Acesso do Cliente</h1>
+                    <p class="auth-subtitle">Informe suas credenciais para gerenciar suas locações</p>
+                </div>
 
-    <h:form>
-        <h:panelGrid columns="2">
-            <h:outputLabel for="cpf" value="CPF:" />
-            <h:inputText id="cpf" value="#{authMB.cpf}" required="true" requiredMessage="O CPF é obrigatório." />
+                <!-- Mensagens JSF -->
+                <h:panelGroup layout="block" styleClass="messages-box" rendered="#{facesContext.maximumSeverity != null}">
+                    <h:messages globalOnly="false" styleClass="faces-messages" />
+                </h:panelGroup>
 
-            <h:outputLabel for="senha" value="Senha:" />
-            <h:inputSecret id="senha" value="#{authMB.password}" required="true" requiredMessage="A senha é obrigatória." />
+                <!-- Formulário de Login -->
+                <h:form id="loginForm">
+                    <div class="form-group">
+                        <h:outputLabel for="cpf" value="CPF" styleClass="form-label" />
+                        <h:inputText id="cpf" 
+                                     value="#{authMB.cpf}" 
+                                     required="true" 
+                                     requiredMessage="O CPF é obrigatório." 
+                                     styleClass="form-input" 
+                                     placeholder="000.000.000-00" />
+                    </div>
 
-            <h:outputText value="" />
-            <h:commandButton value="Entrar" action="#{authMB.login}" />
-        </h:panelGrid>
-    </h:form>
+                    <div class="form-group">
+                        <h:outputLabel for="senha" value="Senha" styleClass="form-label" />
+                        <h:inputSecret id="senha" 
+                                       value="#{authMB.password}" 
+                                       required="true" 
+                                       requiredMessage="A senha é obrigatória." 
+                                       styleClass="form-input" 
+                                       placeholder="••••••••" />
+                    </div>
 
-    <br />
-    <p>Ainda não tem conta? <h:link outcome="register.xhtml" value="Cadastre-se aqui" />.</p>
+                    <div class="form-actions">
+                        <h:commandButton value="Entrar no Sistema" action="#{authMB.login}" styleClass="btn btn-primary btn-block" />
+                    </div>
+                </h:form>
+
+                <div class="auth-footer">
+                    Ainda não tem conta? <h:link outcome="register.xhtml" value="Cadastre-se gratuitamente" />.
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <img src="#{request.contextPath}/assets/autorent_logo.png" alt="AutoRent" style="height: 28px; width: auto;" />
+            </div>
+            <p class="footer-copy">© 2026 AutoRent Sistema de Locação. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
 </h:body>
 </html>

@@ -1,46 +1,165 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-	  xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
-    <title>AutoRent - Início</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AutoRent - Sistema de Locação de Veículos</title>
+    <link rel="stylesheet" href="#{request.contextPath}/css/main.css" />
 </h:head>
 <h:body>
-    <h1>AutoRent - Sistema de Locação de Veículos</h1>
-    
-    <h:panelGroup rendered="#{authMB.authenticated}">
-        <p>Bem-vindo, <strong>#{authMB.loggedUser.name}</strong>!</p>
-        <p>
-            <h:link outcome="dashboard.xhtml" value="Meu Dashboard" /> | 
-            <h:link outcome="vehicles.xhtml" value="Consultar Veículos" /> | 
-            <h:link outcome="my-rentals.xhtml" value="Minhas Locações" /> | 
-            <h:form style="display:inline;">
-                <h:commandLink value="Sair" action="#{authMB.logout}" />
-            </h:form>
-        </p>
-    </h:panelGroup>
 
-    <h:panelGroup rendered="#{!authMB.authenticated}">
-        <p>
-            <h:link outcome="login.xhtml" value="Entrar (Login)" /> | 
-            <h:link outcome="register.xhtml" value="Cadastre-se" /> | 
-            <h:link outcome="vehicles.xhtml" value="Consultar Catálogo de Veículos" />
-        </p>
-    </h:panelGroup>
+    <!-- Header & Navegação -->
+    <header class="site-header">
+        <div class="nav-container">
+            <h:link outcome="index.xhtml" styleClass="nav-brand">
+                <img src="#{request.contextPath}/assets/autorent_logo.png" alt="AutoRent Logo" class="nav-logo-img" />
+            </h:link>
 
-    <hr />
+            <nav class="nav-menu">
+                <h:link outcome="index.xhtml" value="Início" styleClass="nav-link active" />
+                <h:link outcome="vehicles.xhtml" value="Catálogo" styleClass="nav-link" />
+                
+                <h:panelGroup rendered="#{authMB.authenticated}">
+                    <h:link outcome="dashboard.xhtml" value="Dashboard" styleClass="nav-link" />
+                    <h:link outcome="my-rentals.xhtml" value="Minhas Locações" styleClass="nav-link" />
+                </h:panelGroup>
+            </nav>
 
-    <h:messages globalOnly="false" />
+            <div class="nav-user-meta">
+                <h:panelGroup rendered="#{authMB.authenticated}">
+                    <span class="user-badge">
+                        <span>Bem-vindo,</span>
+                        <strong>#{authMB.loggedUser.name}</strong>
+                    </span>
+                    <h:form style="display:inline;">
+                        <h:commandButton value="Sair" action="#{authMB.logout}" styleClass="btn btn-outline btn-sm" />
+                    </h:form>
+                </h:panelGroup>
 
-    <h2>Bem-vindo à AutoRent</h2>
-    <p>Escolha um veículo, faça sua reserva online e retire na agência mais próxima de você.</p>
+                <h:panelGroup rendered="#{!authMB.authenticated}" styleClass="nav-auth-buttons">
+                    <h:link outcome="login.xhtml" value="Entrar" styleClass="btn btn-outline btn-sm" />
+                    <h:link outcome="register.xhtml" value="Cadastre-se" styleClass="btn btn-primary btn-sm" />
+                </h:panelGroup>
+            </div>
+        </div>
+    </header>
 
-    <h3>Status Global da Frota</h3>
-    <p>Veículos disponíveis para locação no momento: <strong>#{dashboardMB.totalAvailableFleet}</strong></p>
+    <!-- Conteúdo Principal -->
+    <main class="main-wrapper">
 
-    <p>
-        <h:link outcome="vehicles.xhtml" value="Clique aqui para ver a frota de veículos disponíveis" />
-    </p>
+        <!-- Mensagens JSF -->
+        <h:panelGroup layout="block" styleClass="messages-box" rendered="#{facesContext.maximumSeverity != null}">
+            <h:messages globalOnly="false" styleClass="faces-messages" />
+        </h:panelGroup>
+
+        <!-- Hero Section Automotivo -->
+        <section class="hero-banner">
+            <div class="hero-content">
+                <div class="hero-tag">Tecnologia Automotiva de Ponta</div>
+                <h1 class="hero-title">
+                    A Experiência Definitiva em <span>Locação de Veículos</span>.
+                </h1>
+                <p class="hero-description">
+                    Escolha o veículo perfeito para o seu momento, reserve em segundos e retire com agilidade e total segurança na agência mais próxima de você.
+                </p>
+                
+                <div class="hero-actions">
+                    <h:link outcome="vehicles.xhtml" value="Explorar Catálogo Completo" styleClass="btn btn-primary btn-lg" />
+                    
+                    <h:panelGroup rendered="#{!authMB.authenticated}">
+                        <h:link outcome="login.xhtml" value="Acessar Minha Conta" styleClass="btn btn-secondary btn-lg" />
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{authMB.authenticated}">
+                        <h:link outcome="dashboard.xhtml" value="Meu Dashboard" styleClass="btn btn-secondary btn-lg" />
+                    </h:panelGroup>
+                </div>
+            </div>
+
+            <!-- Card de Telemetria / Status da Frota -->
+            <div class="hero-fleet-card">
+                <span class="fleet-stat-label">Frota Global em Tempo Real</span>
+                <div class="fleet-stat-value">
+                    #{dashboardMB.totalAvailableFleet != null ? dashboardMB.totalAvailableFleet : 0}
+                </div>
+                <div class="status-badge status-available" style="align-self: flex-start; margin-bottom: 0.75rem;">
+                    <span class="status-dot"></span>
+                    Disponíveis para Locação Agora
+                </div>
+                <p class="fleet-stat-caption">Veículos revisados e prontos para partida imediata em todas as nossas agências integradas.</p>
+            </div>
+        </section>
+
+        <!-- Seção de Categorias de Veículos -->
+        <div class="page-header" style="margin-top: 1rem;">
+            <div class="page-title-group">
+                <span class="page-overline">Categorias</span>
+                <h2 class="page-title" style="font-size: 1.6rem;">Modelos para Cada Perfil</h2>
+                <p class="page-subtitle">Selecione o estilo de carroceria ideal para a sua viagem ou necessidade profissional.</p>
+            </div>
+            <div>
+                <h:link outcome="vehicles.xhtml" value="Ver Toda a Frota →" styleClass="btn btn-outline-red btn-sm" />
+            </div>
+        </div>
+
+        <div class="categories-strip">
+            <h:link outcome="vehicles.xhtml" styleClass="category-chip">
+                <img src="#{request.contextPath}/assets/suv.png" alt="SUV" class="category-chip-icon" />
+                <span class="category-chip-name">SUV</span>
+            </h:link>
+            <h:link outcome="vehicles.xhtml" styleClass="category-chip">
+                <img src="#{request.contextPath}/assets/seda.png" alt="Sedan" class="category-chip-icon" />
+                <span class="category-chip-name">Sedan</span>
+            </h:link>
+            <h:link outcome="vehicles.xhtml" styleClass="category-chip">
+                <img src="#{request.contextPath}/assets/hatchback.png" alt="Hatch" class="category-chip-icon" />
+                <span class="category-chip-name">Hatch</span>
+            </h:link>
+            <h:link outcome="vehicles.xhtml" styleClass="category-chip">
+                <img src="#{request.contextPath}/assets/pickup.png" alt="Picape" class="category-chip-icon" />
+                <span class="category-chip-name">Picape</span>
+            </h:link>
+            <h:link outcome="vehicles.xhtml" styleClass="category-chip">
+                <img src="#{request.contextPath}/assets/cupe.png" alt="Cupê" class="category-chip-icon" />
+                <span class="category-chip-name">Cupê</span>
+            </h:link>
+            <h:link outcome="vehicles.xhtml" styleClass="category-chip">
+                <img src="#{request.contextPath}/assets/van.png" alt="Van" class="category-chip-icon" />
+                <span class="category-chip-name">Van</span>
+            </h:link>
+        </div>
+
+        <!-- Pilares de Confiança AutoRent -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3.5rem;">
+            <div style="background: #0a0a0a; border: 1px solid #1a1a1a; padding: 2rem;">
+                <div style="color: #e50914; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem;">01. Rigor Mecânico</div>
+                <h3 style="color: #fff; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Frota Inspecionada</h3>
+                <p style="color: #888; font-size: 0.88rem; line-height: 1.5;">Checklist rigoroso a cada devolução para assegurar máxima segurança, conforto e confiabilidade na sua rota.</p>
+            </div>
+            <div style="background: #0a0a0a; border: 1px solid #1a1a1a; padding: 2rem;">
+                <div style="color: #e50914; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem;">02. Transparência Real</div>
+                <h3 style="color: #fff; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Tarifas Claras</h3>
+                <p style="color: #888; font-size: 0.88rem; line-height: 1.5;">Sem taxas ocultas. Você visualiza o valor total estimado com acessórios opcionais antes mesmo de confirmar.</p>
+            </div>
+            <div style="background: #0a0a0a; border: 1px solid #1a1a1a; padding: 2rem;">
+                <div style="color: #e50914; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem;">03. Rede Integrada</div>
+                <h3 style="color: #fff; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Multi-Agências</h3>
+                <p style="color: #888; font-size: 0.88rem; line-height: 1.5;">Retire em uma unidade e devolva em outra conforme sua conveniência e itinerário de viagem.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <img src="#{request.contextPath}/assets/autorent_logo.png" alt="AutoRent" style="height: 28px; width: auto;" />
+            </div>
+            <p class="footer-copy">© 2026 AutoRent Sistema de Locação. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
 </h:body>
 </html>

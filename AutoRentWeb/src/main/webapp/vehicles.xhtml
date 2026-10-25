@@ -1,110 +1,226 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-	  xmlns:f="http://java.sun.com/jsf/core">
-	  
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <h:head>
-    <title>AutoRent - Frota de Veículos</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AutoRent - Catálogo de Veículos</title>
+    <link rel="stylesheet" href="#{request.contextPath}/css/main.css" />
 </h:head>
 <h:body>
-    <h1>AutoRent - Catálogo de Veículos</h1>
 
-    <h:panelGroup rendered="#{authMB.authenticated}">
-        <p>
-            Olá, <strong>#{authMB.loggedUser.name}</strong> | 
-            <h:link outcome="dashboard.xhtml" value="Dashboard" /> | 
-            <h:link outcome="vehicles.xhtml" value="Consultar Veículos" /> | 
-            <h:link outcome="my-rentals.xhtml" value="Minhas Locações" /> | 
-            <h:form style="display:inline;">
-                <h:commandLink value="Sair" action="#{authMB.logout}" />
-            </h:form>
-        </p>
-    </h:panelGroup>
+    <!-- Header & Navegação -->
+    <header class="site-header">
+        <div class="nav-container">
+            <h:link outcome="index.xhtml" styleClass="nav-brand">
+                <img src="#{request.contextPath}/assets/autorent_logo.png" alt="AutoRent Logo" class="nav-logo-img" />
+            </h:link>
 
-    <h:panelGroup rendered="#{!authMB.authenticated}">
-        <p>
-            <h:link outcome="index.xhtml" value="Início" /> | 
-            <h:link outcome="login.xhtml" value="Login" /> | 
-            <h:link outcome="register.xhtml" value="Cadastre-se" />
-        </p>
-    </h:panelGroup>
-
-    <hr />
-
-    <h:messages globalOnly="false" />
-
-    <h2>Filtros de Busca</h2>
-
-    <h:form id="filtroForm">
-        <h:panelGrid columns="4" cellpadding="4">
-            <h:outputLabel for="categoria" value="Categoria:" />
-            <h:selectOneMenu id="categoria" value="#{vehicleCatalogMB.selectedCategory}">
-                <f:selectItem itemLabel="-- Todas as Categorias --" itemValue="" />
-                <f:selectItems value="#{vehicleCatalogMB.categories}" var="c" itemLabel="#{c.description}" itemValue="#{c}" />
-            </h:selectOneMenu>
-
-            <h:outputLabel for="agencia" value="Agência:" />
-            <h:selectOneMenu id="agencia" value="#{vehicleCatalogMB.selectedAgencyId}">
-                <f:selectItem itemLabel="-- Todas as Agências --" itemValue="" />
-                <f:selectItems value="#{vehicleCatalogMB.agencies}" var="ag" itemLabel="#{ag.name}" itemValue="#{ag.id}" />
-            </h:selectOneMenu>
-
-            <h:outputLabel for="status" value="Disponibilidade:" />
-            <h:selectOneMenu id="status" value="#{vehicleCatalogMB.selectedStatus}">
-                <f:selectItem itemLabel="-- Todos os Status --" itemValue="" />
-                <f:selectItems value="#{vehicleCatalogMB.statuses}" var="st" itemLabel="#{st.description}" itemValue="#{st}" />
-            </h:selectOneMenu>
-
-            <h:outputText value="" />
-            <h:panelGroup>
-                <h:commandButton value="Filtrar" action="#{vehicleCatalogMB.search}" />
-                <h:commandButton value="Limpar" action="#{vehicleCatalogMB.clearFilters}" style="margin-left: 5px;" />
-            </h:panelGroup>
-        </h:panelGrid>
-    </h:form>
-
-    <hr />
-
-    <h2>Veículos Encontrados</h2>
-
-    <h:form id="tabelaForm">
-        <h:dataTable value="#{vehicleCatalogMB.vehicles}" var="v" border="1" cellpadding="5" rendered="#{not empty vehicleCatalogMB.vehicles}">
-            <h:column>
-                <f:facet name="header">Veículo</f:facet>
-                #{v.brand} #{v.model} (#{v.year})
-            </h:column>
-            <h:column>
-                <f:facet name="header">Categoria</f:facet>
-                #{v.category.description}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Placa</f:facet>
-                #{v.licensePlate}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Agência Atual</f:facet>
-                #{v.agency.name}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Diária</f:facet>
-                R$ #{v.dailyPrice}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Status</f:facet>
-                #{v.status.description}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Ações</f:facet>
-                <h:panelGroup rendered="#{v.status eq 'AVAILABLE'}">
-                     | 
-                    <h:commandButton value="Alugar / Reservar" action="#{rentalProcessWebMB.startFlow(v.id)}" />
+            <nav class="nav-menu">
+                <h:link outcome="index.xhtml" value="Início" styleClass="nav-link" />
+                <h:link outcome="vehicles.xhtml" value="Catálogo" styleClass="nav-link active" />
+                
+                <h:panelGroup rendered="#{authMB.authenticated}">
+                    <h:link outcome="dashboard.xhtml" value="Dashboard" styleClass="nav-link" />
+                    <h:link outcome="my-rentals.xhtml" value="Minhas Locações" styleClass="nav-link" />
                 </h:panelGroup>
-            </h:column>
-        </h:dataTable>
-        <h:panelGroup rendered="#{empty vehicleCatalogMB.vehicles}">
-            <p>Nenhum veículo encontrado com os filtros selecionados.</p>
+            </nav>
+
+            <div class="nav-user-meta">
+                <h:panelGroup rendered="#{authMB.authenticated}">
+                    <span class="user-badge">
+                        <span>Olá,</span>
+                        <strong>#{authMB.loggedUser.name}</strong>
+                    </span>
+                    <h:form style="display:inline;">
+                        <h:commandButton value="Sair" action="#{authMB.logout}" styleClass="btn btn-outline btn-sm" />
+                    </h:form>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{!authMB.authenticated}" styleClass="nav-auth-buttons">
+                    <h:link outcome="login.xhtml" value="Entrar" styleClass="btn btn-outline btn-sm" />
+                    <h:link outcome="register.xhtml" value="Cadastre-se" styleClass="btn btn-primary btn-sm" />
+                </h:panelGroup>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-wrapper">
+
+        <!-- Cabeçalho da Página -->
+        <div class="page-header">
+            <div class="page-title-group">
+                <span class="page-overline">Frota Exclusiva</span>
+                <h1 class="page-title">Catálogo de Veículos</h1>
+                <p class="page-subtitle">Encontre o modelo ideal para a sua necessidade com as melhores condições de locação.</p>
+            </div>
+        </div>
+
+        <!-- Mensagens JSF -->
+        <h:panelGroup layout="block" styleClass="messages-box" rendered="#{facesContext.maximumSeverity != null}">
+            <h:messages globalOnly="false" styleClass="faces-messages" />
         </h:panelGroup>
-    </h:form>
+
+        <!-- Vitrine de Carrocerias / Kit de Categorias (Inspirado no Webmotors) -->
+        <div class="categories-strip">
+            <div class="category-chip">
+                <img src="#{request.contextPath}/assets/suv.png" alt="SUV" class="category-chip-icon" />
+                <span class="category-chip-name">SUV</span>
+            </div>
+            <div class="category-chip">
+                <img src="#{request.contextPath}/assets/seda.png" alt="Sedan" class="category-chip-icon" />
+                <span class="category-chip-name">Sedan</span>
+            </div>
+            <div class="category-chip">
+                <img src="#{request.contextPath}/assets/hatchback.png" alt="Hatch" class="category-chip-icon" />
+                <span class="category-chip-name">Hatch</span>
+            </div>
+            <div class="category-chip">
+                <img src="#{request.contextPath}/assets/pickup.png" alt="Picape" class="category-chip-icon" />
+                <span class="category-chip-name">Picape</span>
+            </div>
+            <div class="category-chip">
+                <img src="#{request.contextPath}/assets/cupe.png" alt="Cupê" class="category-chip-icon" />
+                <span class="category-chip-name">Cupê</span>
+            </div>
+            <div class="category-chip">
+                <img src="#{request.contextPath}/assets/van.png" alt="Van" class="category-chip-icon" />
+                <span class="category-chip-name">Van</span>
+            </div>
+        </div>
+
+        <!-- Painel de Filtros de Busca -->
+        <div class="filters-container">
+            <div class="filters-header">
+                <h2 class="filters-title">Filtros de Busca</h2>
+            </div>
+
+            <h:form id="filtroForm">
+                <div class="filter-grid">
+                    <div class="filter-item">
+                        <h:outputLabel for="categoria" value="Categoria" styleClass="filter-label" />
+                        <h:selectOneMenu id="categoria" value="#{vehicleCatalogMB.selectedCategory}" styleClass="filter-select">
+                            <f:selectItem itemLabel="Todas as Categorias" itemValue="" />
+                            <f:selectItems value="#{vehicleCatalogMB.categories}" var="c" itemLabel="#{c.description}" itemValue="#{c}" />
+                        </h:selectOneMenu>
+                    </div>
+
+                    <div class="filter-item">
+                        <h:outputLabel for="agencia" value="Agência de Retirada" styleClass="filter-label" />
+                        <h:selectOneMenu id="agencia" value="#{vehicleCatalogMB.selectedAgencyId}" styleClass="filter-select">
+                            <f:selectItem itemLabel="Todas as Agências" itemValue="" />
+                            <f:selectItems value="#{vehicleCatalogMB.agencies}" var="ag" itemLabel="#{ag.name}" itemValue="#{ag.id}" />
+                        </h:selectOneMenu>
+                    </div>
+
+                    <div class="filter-item">
+                        <h:outputLabel for="status" value="Disponibilidade" styleClass="filter-label" />
+                        <h:selectOneMenu id="status" value="#{vehicleCatalogMB.selectedStatus}" styleClass="filter-select">
+                            <f:selectItem itemLabel="Todos os Status" itemValue="" />
+                            <f:selectItems value="#{vehicleCatalogMB.statuses}" var="st" itemLabel="#{st.description}" itemValue="#{st}" />
+                        </h:selectOneMenu>
+                    </div>
+
+                    <div class="filter-buttons">
+                        <h:commandButton value="Filtrar" action="#{vehicleCatalogMB.search}" styleClass="btn btn-primary" />
+                        <h:commandButton value="Limpar" action="#{vehicleCatalogMB.clearFilters}" styleClass="btn btn-secondary" />
+                    </div>
+                </div>
+            </h:form>
+        </div>
+
+        <!-- Grid de Cards de Veículos -->
+        <h:form id="tabelaForm">
+            <h:panelGroup layout="block" styleClass="vehicle-grid" rendered="#{not empty vehicleCatalogMB.vehicles}">
+                <ui:repeat value="#{vehicleCatalogMB.vehicles}" var="v">
+                    <div class="vehicle-card">
+                        <!-- Topo do Card / Palco com ícone da silhueta da categoria -->
+                        <div class="card-stage">
+                            <div class="card-top-badges">
+                                <span class="badge-category">#{v.category.description}</span>
+                                <span class="status-badge status-#{v.status eq 'AVAILABLE' ? 'available' : (v.status eq 'RENTED' ? 'rented' : (v.status eq 'RESERVED' ? 'reserved' : 'maintenance'))}">
+                                    <span class="status-dot"></span>
+                                    #{v.status.description}
+                                </span>
+                            </div>
+                            
+                            <!-- Silhueta da categoria de veículo correspondente -->
+                            <img src="#{request.contextPath}/assets/#{v.category eq 'HATCH' ? 'hatchback.png' : (v.category eq 'SEDAN' ? 'seda.png' : (v.category eq 'SUV' ? 'suv.png' : (v.category eq 'PICKUP' ? 'pickup.png' : (v.category eq 'COUPE' ? 'cupe.png' : 'van.png'))))}" 
+                                 alt="#{v.category.description}" 
+                                 class="card-car-icon" />
+                        </div>
+
+                        <!-- Conteúdo do Card -->
+                        <div class="card-content">
+                            <div class="card-brand-model">
+                                <div class="card-brand">#{v.brand}</div>
+                                <h3 class="card-model-title">
+                                    #{v.model} <span class="card-year-tag">(#{v.year})</span>
+                                </h3>
+                            </div>
+
+                            <div class="card-specs-list">
+                                <div class="card-spec-row">
+                                    <span class="spec-label">Agência Atual</span>
+                                    <span class="spec-value">#{v.agency.name}</span>
+                                </div>
+                                <div class="card-spec-row">
+                                    <span class="spec-label">Placa</span>
+                                    <span class="spec-value spec-plate">#{v.licensePlate}</span>
+                                </div>
+                            </div>
+
+                            <div class="card-footer">
+                                <div class="card-pricing">
+                                    <span class="price-currency">R$</span>
+                                    <span class="price-amount">
+                                        <h:outputText value="#{v.dailyPrice}">
+                                            <f:convertNumber pattern="#,##0.00" />
+                                        </h:outputText>
+                                    </span>
+                                    <span class="price-period">/ dia</span>
+                                </div>
+
+                                <h:panelGroup rendered="#{v.status eq 'AVAILABLE'}">
+                                    <h:commandButton value="Alugar / Reservar" 
+                                                     action="#{rentalProcessWebMB.startFlow(v.id)}" 
+                                                     styleClass="btn btn-primary btn-block" />
+                                </h:panelGroup>
+
+                                <h:panelGroup rendered="#{v.status ne 'AVAILABLE'}">
+                                    <button type="button" class="btn btn-secondary btn-block" disabled="disabled" style="opacity: 0.5; cursor: not-allowed;">
+                                        Indisponível
+                                    </button>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+                </ui:repeat>
+            </h:panelGroup>
+
+            <!-- Estado Vazio quando não houver veículos -->
+            <h:panelGroup layout="block" styleClass="empty-state" rendered="#{empty vehicleCatalogMB.vehicles}">
+                <div class="empty-state-icon">🚘</div>
+                <h3 class="empty-state-title">Nenhum veículo encontrado</h3>
+                <p class="empty-state-text">Não encontramos veículos disponíveis para os filtros selecionados. Tente ajustar suas opções de busca.</p>
+                <h:commandButton value="Limpar Filtros" action="#{vehicleCatalogMB.clearFilters}" styleClass="btn btn-primary" />
+            </h:panelGroup>
+        </h:form>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <img src="#{request.contextPath}/assets/autorent_logo.png" alt="AutoRent" style="height: 28px; width: auto;" />
+            </div>
+            <p class="footer-copy">© 2026 AutoRent Sistema de Locação. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
 </h:body>
 </html>
