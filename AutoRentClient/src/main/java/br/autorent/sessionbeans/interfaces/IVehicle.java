@@ -6,7 +6,9 @@ import br.autorent.enums.VehicleCategory;
 import br.autorent.enums.VehicleStatus;
 import br.autorent.model.Agency;
 import br.autorent.model.Vehicle;
+import jakarta.ejb.Remote;
 
+@Remote
 public interface IVehicle extends ICrudService<Vehicle> {
 
 	List<Vehicle> findAvailableByAgency(Long agencyId);

@@ -8,7 +8,9 @@ import br.autorent.model.Agency;
 import br.autorent.model.Rental;
 import br.autorent.model.User;
 import br.autorent.model.Vehicle;
+import jakarta.ejb.Remote;
 
+@Remote
 public interface IRentalProcess {
 
 	User getCustomer();

@@ -1,5 +1,8 @@
 package br.autorent.sessionbeans.interfaces;
 
+import jakarta.ejb.Remote;
+
+@Remote
 public interface IFleetStatus {
 
     Long getTotalVehicles();
