@@ -12,6 +12,10 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+/**
+ * Managed Bean JSF para a tela de dashboard do usuário.
+ * Carrega locações ativas, reservas e estatísticas da frota ao inicializar.
+ */
 @Named("dashboardMB")
 @RequestScoped
 public class DashboardMB implements Serializable {
@@ -32,8 +36,13 @@ public class DashboardMB implements Serializable {
 	private Rental currentRented;
 	private Long totalAvailableFleet;
 
+	/** Construtor padrão. */
 	public DashboardMB() {}
 
+	/**
+	 * Carrega os dados do dashboard para o usuário logado.
+	 * Busca locações ativas, reservas e a locação em andamento atual.
+	 */
 	@PostConstruct
 	public void init() {
 		
@@ -50,22 +59,27 @@ public class DashboardMB implements Serializable {
 		
 	}
 
+	/** @return lista de locações em andamento do usuário */
 	public List<Rental> getActiveRentals() {
 		return activeRentals;
 	}
 
+	/** @return lista de reservas do usuário */
 	public List<Rental> getReservations() {
 		return reservations;
 	}
 
+	/** @return locação em andamento atual do usuário */
 	public Rental getCurrentRented() {
 		return currentRented;
 	}
 
+	/** @return total de veículos disponíveis na frota */
 	public Long getTotalAvailableFleet() {
 		return totalAvailableFleet;
 	}
 
+	/** @return {@code true} se o usuário possui uma locação em andamento */
 	public boolean hasCurrentRented() {
 		return currentRented != null;
 	}

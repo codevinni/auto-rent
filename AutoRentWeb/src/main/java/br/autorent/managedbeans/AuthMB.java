@@ -12,6 +12,10 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 
+/**
+ * Managed Bean JSF responsável pela autenticação de usuários na aplicação web.
+ * Mantém a sessão do usuário logado com escopo de sessão.
+ */
 @Named("authMB")
 @SessionScoped
 public class AuthMB implements Serializable {
@@ -27,8 +31,15 @@ public class AuthMB implements Serializable {
 	private String cpf;
 	private String password;
 
+	/** Construtor padrão. */
 	public AuthMB() {}
 
+	/**
+	 * Realiza o login do usuário com CPF e senha.
+	 * Redireciona para o dashboard em caso de sucesso.
+	 *
+	 * @return redirecionamento de navegação JSF ou {@code null} em caso de erro
+	 */
 	public String login() {
 		
 		if (cpf == null || cpf.isBlank() || password == null || password.isBlank()) {
@@ -47,6 +58,11 @@ public class AuthMB implements Serializable {
 		}
 	}
 
+	/**
+	 * Realiza o logout do usuário e invalida a sessão HTTP.
+	 *
+	 * @return redirecionamento de navegação para a tela de login
+	 */
 	public String logout() {
 		
 		userAuthBean.logout();
@@ -55,30 +71,37 @@ public class AuthMB implements Serializable {
 		return "login.xhtml?faces-redirect=true";
 	}
 
+	/** @return usuário autenticado na sessão */
 	public User getLoggedUser() {
 		return userAuthBean.getLoggedUser();
 	}
 
+	/** @return {@code true} se há um usuário autenticado */
 	public boolean isAuthenticated() {
 		return userAuthBean.isAuthenticated();
 	}
 
+	/** @return {@code true} se o usuário logado é um cliente */
 	public boolean isCustomer() {
 		return isAuthenticated() && getLoggedUser() != null && getLoggedUser().getRole() == Role.CUSTOMER;
 	}
 
+	/** @return CPF informado no formulário de login */
 	public String getCpf() {
 		return cpf;
 	}
 
+	/** @param cpf CPF informado no formulário de login */
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
 
+	/** @return senha informada no formulário de login */
 	public String getPassword() {
 		return password;
 	}
 
+	/** @param password senha informada no formulário de login */
 	public void setPassword(String password) {
 		this.password = password;
 	}

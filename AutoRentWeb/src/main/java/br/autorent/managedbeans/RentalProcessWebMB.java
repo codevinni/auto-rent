@@ -20,6 +20,11 @@ import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+/**
+ * Managed Bean JSF para o fluxo de locação/reserva na aplicação web.
+ * Gerencia a seleção de veículo, agências, período, acessórios e confirmação.
+ * Escopo de sessão para manter o estado durante as etapas do fluxo.
+ */
 @Named("rentalProcessWebMB")
 @SessionScoped
 public class RentalProcessWebMB implements Serializable {
@@ -53,8 +58,17 @@ public class RentalProcessWebMB implements Serializable {
 	private List<Agency> agencies;
 	private List<Accessory> availableAccessories;
 
+	/** Construtor padrão. */
 	public RentalProcessWebMB() {}
 
+	/**
+	 * Inicia o fluxo de locação para o veículo selecionado.
+	 * Verifica autenticação e disponibilidade do veículo.
+	 * Carrega agências e acessórios disponíveis.
+	 *
+	 * @param selectedVehicleId identificador do veículo escolhido
+	 * @return redirecionamento de navegação para a tela de locação ou login
+	 */
 	public String startFlow(Long selectedVehicleId) {
 		FacesContext context = FacesContext.getCurrentInstance();
 
@@ -97,11 +111,18 @@ public class RentalProcessWebMB implements Serializable {
 		return "rental.xhtml?faces-redirect=true";
 	}
 
+	/**
+	 * Recalcula o valor total estimado da locação com base nas seleções atuais.
+	 */
 	public void calculateTotal() {
 		syncProcessBeanState();
 		this.estimatedTotal = rentalProcessBean.calculateTotalValue();
 	}
 
+	/**
+	 * Sincroniza o estado local do managed bean com o EJB stateful de processo de locação.
+	 * Transfere cliente, veículo, agências, período e acessórios selecionados.
+	 */
 	private void syncProcessBeanState() {
 		rentalProcessBean.setCustomer(authMB.getLoggedUser());
 		rentalProcessBean.setVehicle(vehicle);
@@ -133,6 +154,12 @@ public class RentalProcessWebMB implements Serializable {
 		}
 	}
 
+	/**
+	 * Confirma a locação ou reserva após validação.
+	 *
+	 * @param asReservation {@code true} para reserva futura, {@code false} para locação imediata
+	 * @return redirecionamento de navegação para "minhas locações" ou {@code null} em caso de erro
+	 */
 	public String confirm(boolean asReservation) {
 		FacesContext context = FacesContext.getCurrentInstance();
 
@@ -171,12 +198,20 @@ public class RentalProcessWebMB implements Serializable {
 		}
 	}
 
+	/**
+	 * Cancela o fluxo de locação e redireciona para o catálogo de veículos.
+	 *
+	 * @return redirecionamento de navegação para a listagem de veículos
+	 */
 	public String cancel() {
 		rentalProcessBean.cancel();
 		resetState();
 		return "vehicles.xhtml?faces-redirect=true";
 	}
 
+	/**
+	 * Reinicia o estado local do managed bean após confirmação ou cancelamento.
+	 */
 	private void resetState() {
 		this.vehicleId = null;
 		this.vehicle = null;
@@ -188,74 +223,92 @@ public class RentalProcessWebMB implements Serializable {
 		this.estimatedTotal = 0.0;
 	}
 
+	/** @return identificador do veículo selecionado */
 	public Long getVehicleId() {
 		return vehicleId;
 	}
 
+	/** @param vehicleId identificador do veículo selecionado */
 	public void setVehicleId(Long vehicleId) {
 		this.vehicleId = vehicleId;
 	}
 
+	/** @return veículo selecionado para locação */
 	public Vehicle getVehicle() {
 		return vehicle;
 	}
 
+	/** @param vehicle veículo selecionado */
 	public void setVehicle(Vehicle vehicle) {
 		this.vehicle = vehicle;
 	}
 
+	/** @return identificador da agência de retirada */
 	public Long getPickupAgencyId() {
 		return pickupAgencyId;
 	}
 
+	/** @param pickupAgencyId identificador da agência de retirada */
 	public void setPickupAgencyId(Long pickupAgencyId) {
 		this.pickupAgencyId = pickupAgencyId;
 	}
 
+	/** @return identificador da agência de devolução */
 	public Long getReturnAgencyId() {
 		return returnAgencyId;
 	}
 
+	/** @param returnAgencyId identificador da agência de devolução */
 	public void setReturnAgencyId(Long returnAgencyId) {
 		this.returnAgencyId = returnAgencyId;
 	}
 
+	/** @return data de retirada selecionada */
 	public LocalDate getPickupDate() {
 		return pickupDate;
 	}
 
+	/** @param pickupDate data de retirada */
 	public void setPickupDate(LocalDate pickupDate) {
 		this.pickupDate = pickupDate;
 	}
 
+	/** @return data prevista de devolução */
 	public LocalDate getExpectedReturnDate() {
 		return expectedReturnDate;
 	}
 
+	/** @param expectedReturnDate data prevista de devolução */
 	public void setExpectedReturnDate(LocalDate expectedReturnDate) {
 		this.expectedReturnDate = expectedReturnDate;
 	}
 
+	/** @return lista de IDs dos acessórios selecionados */
 	public List<Long> getSelectedAccessoryIds() {
 		return selectedAccessoryIds;
 	}
 
+	/** @param selectedAccessoryIds lista de IDs dos acessórios selecionados */
 	public void setSelectedAccessoryIds(List<Long> selectedAccessoryIds) {
 		this.selectedAccessoryIds = selectedAccessoryIds;
 	}
 
+	/** @return valor total estimado da locação */
 	public Double getEstimatedTotal() {
 		return estimatedTotal;
 	}
 
+	/** @param estimatedTotal valor total estimado */
 	public void setEstimatedTotal(Double estimatedTotal) {
 		this.estimatedTotal = estimatedTotal;
 	}
 
+	/** @return lista de agências disponíveis */
 	public List<Agency> getAgencies() {
 		return agencies;
 	}
 
+	/** @return lista de acessórios disponíveis */
 	public List<Accessory> getAvailableAccessories() {
 		return availableAccessories;
 	}
