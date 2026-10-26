@@ -13,15 +13,30 @@ import br.autorent.sessionbeans.interfaces.IUser;
 import br.autorent.sessionbeans.interfaces.IUserAuth;
 import br.autorent.sessionbeans.interfaces.IVehicle;
 
+/**
+ * Serviço de localização e inicialização dos EJBs remotos via JNDI.
+ * Conecta ao servidor WildFly e disponibiliza os beans como estáticos.
+ */
 public class EjbService {
 
+	/** Bean de autenticação de usuário. */
 	public static IUserAuth userAuthBean;
+	/** Bean de operações CRUD de usuários. */
 	public static IUser userBean;
+	/** Bean de operações CRUD e consultas de veículos. */
 	public static IVehicle vehicleBean;
+	/** Bean de operações CRUD de agências. */
 	public static IAgency agencyBean;
+	/** Bean de operações CRUD e consultas de locações. */
 	public static IRental rentalBean;
+	/** Bean de fluxo de locação/reserva. */
 	public static IRentalProcess rentalProcessBean;
 
+	/**
+	 * Inicializa todos os EJBs remotos via lookup JNDI no WildFly.
+	 *
+	 * @throws NamingException se ocorrer erro na localização dos beans
+	 */
 	public static void init() throws NamingException {
 		
 		Properties props = new Properties();

@@ -4,8 +4,17 @@ import javax.swing.JOptionPane;
 
 import br.autorent.services.EjbService;
 
+/**
+ * Ponto de entrada da aplicação desktop.
+ * Inicializa a conexão EJB, autentica o funcionário e exibe o menu principal.
+ */
 public class Main {
 
+	/**
+	 * Método principal. Conecta ao servidor, realiza login e inicia o menu.
+	 *
+	 * @param args argumentos de linha de comando (não utilizados)
+	 */
 	public static void main(String[] args) {
 		
 		try {
@@ -22,6 +31,10 @@ public class Main {
 		showMainMenu();
 	}
 
+	/**
+	 * Exibe o menu principal em loop até o funcionário escolher sair.
+	 * Cada opção delega para a GUI correspondente.
+	 */
 	private static void showMainMenu() {
 		
 		String[] options = {

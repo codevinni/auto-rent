@@ -12,8 +12,17 @@ import br.autorent.model.User;
 import br.autorent.model.Vehicle;
 import br.autorent.services.EjbService;
 
+/**
+ * Tela de gestão de locações no aplicativo desktop.
+ * Permite criar locações/reservas, registrar retiradas, devoluções e consultar locações ativas.
+ */
 public class RentalGUI {
 
+	/**
+	 * Conduz o fluxo completo de criação de uma locação ou reserva.
+	 * Coleta cliente, agência, veículo e período via caixas de diálogo.
+	 * Permite confirmar como locação imediata ou reserva futura.
+	 */
 	public static void createRental() {
 		
 		String customerIdStr = JOptionPane.showInputDialog("ID do Cliente:");
@@ -87,6 +96,10 @@ public class RentalGUI {
 		}
 	}
 
+	/**
+	 * Registra a retirada de um veículo a partir de uma reserva existente.
+	 * Altera o status da locação para {@code IN_PROGRESS} e do veículo para {@code RENTED}.
+	 */
 	public static void registerPickup() {
 		
 		StringBuilder sb = new StringBuilder("--- RESERVAS PENDENTES DE RETIRADA ---\n");
@@ -117,6 +130,10 @@ public class RentalGUI {
 		}
 	}
 
+	/**
+	 * Registra a devolução de um veículo de uma locação em andamento.
+	 * Altera o status da locação para {@code COMPLETED} e do veículo para {@code AVAILABLE}.
+	 */
 	public static void registerReturn() {
 		
 		StringBuilder sb = new StringBuilder("--- LOCAÇÕES EM ANDAMENTO ---\n");
@@ -160,6 +177,9 @@ public class RentalGUI {
 		}
 	}
 
+	/**
+	 * Exibe todas as locações em andamento com detalhes de cliente, veículo e datas.
+	 */
 	public static void queryActiveRentals() {
 		
 		StringBuilder sb = new StringBuilder("--- LOCAÇÕES EM ANDAMENTO ---\n");

@@ -9,8 +9,16 @@ import br.autorent.model.Agency;
 import br.autorent.model.Vehicle;
 import br.autorent.services.EjbService;
 
+/**
+ * Tela de gestão de veículos no aplicativo desktop.
+ * Permite consultar a frota de uma agência e alterar o status de veículos.
+ */
 public class VehicleGUI {
 
+	/**
+	 * Consulta e exibe a frota de veículos de uma agência selecionada.
+	 * Lista agências disponíveis e exibe os veículos da agência escolhida.
+	 */
 	public static void queryFleet() {
 		
 		StringBuilder agenciesText = new StringBuilder("--- AGÊNCIAS ---\n");
@@ -49,6 +57,10 @@ public class VehicleGUI {
 		
 	}
 
+	/**
+	 * Permite alterar o status de um veículo via diálogo de seleção.
+	 * Opções disponíveis: AVAILABLE, MAINTENANCE e UNAVAILABLE.
+	 */
 	public static void updateVehicleStatus() {
 		
 		String vehicleIdStr = JOptionPane.showInputDialog("ID do Veículo a alterar:");

@@ -6,8 +6,18 @@ import br.autorent.enums.Role;
 import br.autorent.model.User;
 import br.autorent.services.EjbService;
 
+/**
+ * Tela de login do aplicativo desktop.
+ * Permite apenas funcionários acessarem o sistema.
+ */
 public class LoginGUI {
 
+	/**
+	 * Exibe o diálogo de login em loop até autenticação bem-sucedida ou cancelamento.
+	 * Verifica se o usuário é um funcionário.
+	 *
+	 * @return {@code true} se o login for realizado com sucesso
+	 */
 	public static boolean login() {
 		
 		while (true) {

@@ -8,8 +8,16 @@ import br.autorent.enums.Role;
 import br.autorent.model.User;
 import br.autorent.services.EjbService;
 
+/**
+ * Tela de gestão de clientes no aplicativo desktop.
+ * Permite listar e cadastrar clientes via caixas de diálogo.
+ */
 public class CustomerGUI {
 
+	/**
+	 * Lista todos os clientes cadastrados.
+	 * Exibe apenas usuários {@code CUSTOMER}.
+	 */
 	public static void listCustomers() {
 		
 		List<User> users = EjbService.userBean.listAll();
@@ -35,6 +43,10 @@ public class CustomerGUI {
 		JOptionPane.showMessageDialog(null, sb.toString());
 	}
 
+	/**
+	 * Exibe formulário para cadastro de um novo cliente.
+	 * Coleta nome, CPF, e-mail e senha via diálogos de entrada.
+	 */
 	public static void registerCustomer() {
 		
 		String name = JOptionPane.showInputDialog("Nome do cliente:");
