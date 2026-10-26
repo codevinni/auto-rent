@@ -2,6 +2,8 @@
 
 AutoRent é um sistema distribuído para gerenciamento e locação de veículos, composto por uma aplicação web voltada aos clientes e uma aplicação desktop voltada ao atendimento de balcão por funcionários. O sistema foi desenvolvido sobre a plataforma Jakarta EE utilizando Enterprise JavaBeans (EJB), persistência com JPA/Hibernate, Jakarta Faces (JSF) e Java Swing, operando sobre o servidor de aplicação WildFly integrado ao PostgreSQL.
 
+<img width="1517" height="866" alt="image" src="https://github.com/user-attachments/assets/506b7357-3f99-4cda-9221-75a92f522548" />
+
 ## Sobre
 
 O projeto foi desenvolvido para demonstrar a aplicação prática de sistemas corporativos distribuídos em ambiente Java EE, organizando a solução em módulos especializados: lógica de negócio remota desacoplada, interface web dinâmica e cliente desktop para operações administrativas.
