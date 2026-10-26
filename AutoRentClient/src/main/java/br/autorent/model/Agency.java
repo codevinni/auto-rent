@@ -10,7 +10,8 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 /**
- * 
+ * Entidade JPA que representa uma agência de locação.
+ * Cada agência possui endereço e telefone para contato.
  */
 @Entity
 @Table(name = "agency_table")
@@ -27,66 +28,58 @@ public class Agency implements java.io.Serializable {
 	private Address address;
 	private String phoneNumber;
 	
+	/** Construtor padrão exigido pelo JPA. */
 	public Agency() {}
 	
+	/**
+	 * Cria uma agência com os dados informados.
+	 *
+	 * @param name nome da agência
+	 * @param address endereço da agência
+	 * @param phoneNumber telefone de contato
+	 */
 	public Agency(String name, Address address, String phoneNumber) {
 		this.name = name;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
 	}
 
-	/**
-	 * @return the id
-	 */
+	/** @return identificador único da agência */
 	public Long getId() {
 		return id;
 	}
 
-	/**
-	 * @param id the id to set
-	 */
+	/** @param id identificador único da agência */
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	/**
-	 * @return the name
-	 */
+	/** @return nome da agência */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * @param name the name to set
-	 */
+	/** @param name nome da agência */
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	/**
-	 * @return the address
-	 */
+	/** @return endereço da agência */
 	public Address getAddress() {
 		return address;
 	}
 
-	/**
-	 * @param address the address to set
-	 */
+	/** @param address endereço da agência */
 	public void setAddress(Address address) {
 		this.address = address;
 	}
 
-	/**
-	 * @return the phoneNumber
-	 */
+	/** @return telefone de contato da agência */
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	/**
-	 * @param phoneNumber the phoneNumber to set
-	 */
+	/** @param phoneNumber telefone de contato da agência */
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}

@@ -14,7 +14,8 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
 /**
- * 
+ * Entidade JPA que representa um usuário do sistema (cliente ou funcionário).
+ * Contém dados pessoais, credenciais de acesso e papel do usuário.
  */
 @Entity
 @Table(name = "user_table")
@@ -38,8 +39,18 @@ public class User implements java.io.Serializable {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
+	/** Construtor padrão exigido pelo JPA. */
 	public User() {}
 	
+	/**
+	 * Cria um usuário com os dados informados.
+	 *
+	 * @param name nome completo
+	 * @param cpf CPF do usuário
+	 * @param email e-mail do usuário
+	 * @param plainPassword senha em texto plano (será convertida em hash)
+	 * @param role papel do usuário no sistema
+	 */
 	public User(String name, String cpf, String email, String plainPassword, Role role) {
 		this.name = name;
 		this.cpf = cpf;
@@ -48,100 +59,72 @@ public class User implements java.io.Serializable {
 		this.role = role;
 	}
 
-	/**
-	 * @return the id
-	 */
+	/** @return identificador único do usuário */
 	public Long getId() {
 		return id;
 	}
 
-	/**
-	 * @param id the id to set
-	 */
+	/** @param id identificador único do usuário */
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	/**
-	 * @return the name
-	 */
+	/** @return nome completo do usuário */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * @param name the name to set
-	 */
+	/** @param name nome completo do usuário */
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	/**
-	 * @return the cpf
-	 */
+	/** @return CPF do usuário */
 	public String getCpf() {
 		return cpf;
 	}
 
-	/**
-	 * @param cpf the cpf to set
-	 */
+	/** @param cpf CPF do usuário */
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
 
-	/**
-	 * @return the email
-	 */
+	/** @return e-mail do usuário */
 	public String getEmail() {
 		return email;
 	}
 
-	/**
-	 * @param email the email to set
-	 */
+	/** @param email e-mail do usuário */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
-	/**
-	 * @return the passwordHash
-	 */
+	/** @return hash SHA-256 da senha */
 	public String getPasswordHash() {
 		return passwordHash;
 	}
 
-	/**
-	 * @param passwordHash the passwordHash to set
-	 */
+	/** @param passwordHash hash SHA-256 da senha */
 	public void setPasswordHash(String passwordHash) {
 		this.passwordHash = passwordHash;
 	}
 	
-	/**
-	 * @return the plainPassword
-	 */
+	/** @return senha em texto plano (campo transiente, não persistido) */
 	public String getPlainPassword() {
 		return plainPassword;
 	}
 
-	/**
-	 * @param plainPassword the plainPassword to set
-	 */
+	/** @param plainPassword senha em texto plano */
 	public void setPlainPassword(String plainPassword) {
 		this.plainPassword = plainPassword;
 	}
 
-	/**
-	 * @return the role
-	 */
+	/** @return papel do usuário no sistema */
 	public Role getRole() {
 		return role;
 	}
 
-	/**
-	 * @param role the role to set
-	 */
+	/** @param role papel do usuário no sistema */
 	public void setRole(Role role) {
 		this.role = role;
 	}

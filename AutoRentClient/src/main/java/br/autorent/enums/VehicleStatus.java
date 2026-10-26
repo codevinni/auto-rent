@@ -1,5 +1,8 @@
 package br.autorent.enums;
 
+/**
+ * Status possíveis de um veículo na frota.
+ */
 public enum VehicleStatus {
 
 	AVAILABLE("Disponível"),
@@ -11,16 +14,18 @@ public enum VehicleStatus {
     private final String description;
 
     /**
-     * 
-     * @param description
+     * Cria um status de veículo com a descrição informada.
+     *
+     * @param description descrição do status
      */
     private VehicleStatus(String description) {
         this.description = description;
     }
 
     /**
-     * 
-     * @return
+     * Retorna a descrição do status.
+     *
+     * @return descrição do status
      */
     public String getDescription() {
         return description;

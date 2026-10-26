@@ -5,16 +5,19 @@ import java.security.MessageDigest;
 import java.util.HexFormat;
 
 /**
- * 
+ * Utilitário para hashing e verificação de senhas usando SHA-256.
  */
 public class PasswordUtils {
 	
+	/** Construtor privado para impedir instanciação. */
 	private PasswordUtils() {}
 	
 	/**
-	 * 
-	 * @param plainText
-	 * @return
+	 * Gera o hash SHA-256 de um texto em formato hexadecimal.
+	 *
+	 * @param plainText texto a ser hasheado
+	 * @return hash SHA-256 em hexadecimal
+	 * @throws RuntimeException se ocorrer erro no algoritmo de hash
 	 */
     public static String hash(String plainText) {
     	
@@ -31,10 +34,11 @@ public class PasswordUtils {
     }
 
     /**
-     * 
-     * @param plainText
-     * @param storedHash
-     * @return
+     * Verifica se um texto corresponde a um hash armazenado.
+     *
+     * @param plainText texto para comparação
+     * @param storedHash hash armazenado para verificação
+     * @return {@code true} se o hash do texto corresponder ao hash armazenado
      */
     public static boolean checkPassword(String plainText, String storedHash) {
         return hash(plainText).equalsIgnoreCase(storedHash);

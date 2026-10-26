@@ -1,5 +1,8 @@
 package br.autorent.enums;
 
+/**
+ * Status possíveis de uma locação no sistema.
+ */
 public enum RentalStatus {
 
 	RESERVED("Reservada"),
@@ -11,16 +14,18 @@ public enum RentalStatus {
     private final String description;
 
     /**
-     * 
-     * @param description
+     * Cria um status de locação com a descrição informada.
+     *
+     * @param description descrição do status
      */
     private RentalStatus(String description) {
         this.description = description;
     }
 
     /**
-     * 
-     * @return
+     * Retorna a descrição do status.
+     *
+     * @return descrição do status
      */
     public String getDescription() {
         return description;

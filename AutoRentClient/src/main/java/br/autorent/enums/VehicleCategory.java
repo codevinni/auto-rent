@@ -1,5 +1,8 @@
 package br.autorent.enums;
 
+/**
+ * Categorias de veículos disponíveis na frota.
+ */
 public enum VehicleCategory {
 
 	HATCH("Hatch"),
@@ -12,16 +15,18 @@ public enum VehicleCategory {
     private final String description;
 
     /**
-     * 
-     * @param description
+     * Cria uma categoria com a descrição informada.
+     *
+     * @param description descrição da categoria
      */
     private VehicleCategory(String description) {
         this.description = description;
     }
 
     /**
-     * 
-     * @return
+     * Retorna a descrição da categoria.
+     *
+     * @return descrição da categoria
      */
     public String getDescription() {
         return description;

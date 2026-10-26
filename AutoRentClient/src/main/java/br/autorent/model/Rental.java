@@ -13,6 +13,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
+/**
+ * Entidade JPA que representa uma locação ou reserva de veículo.
+ * Associa um cliente a um veículo, com agências de retirada/devolução e período.
+ */
 @Entity
 @Table(name = "rental_table")
 public class Rental implements java.io.Serializable {
@@ -38,8 +42,22 @@ public class Rental implements java.io.Serializable {
 	private RentalStatus status;
 	private Double totalPrice;
 	
+	/** Construtor padrão exigido pelo JPA. */
 	public Rental() {}
 
+	/**
+	 * Cria uma locação com todos os dados informados.
+	 *
+	 * @param user cliente associado
+	 * @param vehicle veículo locado
+	 * @param pickupAgency agência de retirada
+	 * @param returnAgency agência de devolução
+	 * @param pickupDate data de retirada
+	 * @param expectedReturnDate data prevista de devolução
+	 * @param returnDate data efetiva de devolução
+	 * @param status status da locação
+	 * @param totalPrice valor total da locação
+	 */
 	public Rental(User user, Vehicle vehicle, Agency pickupAgency, Agency returnAgency, LocalDate pickupDate,
 		    	  LocalDate expectedReturnDate, LocalDate returnDate, RentalStatus status, Double totalPrice) {
 
@@ -54,142 +72,102 @@ public class Rental implements java.io.Serializable {
 		this.totalPrice = totalPrice;
 	}
 
-	/**
-	 * @return the id
-	 */
+	/** @return identificador único da locação */
 	public Long getId() {
 		return id;
 	}
 
-	/**
-	 * @param id the id to set
-	 */
+	/** @param id identificador único da locação */
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	/**
-	 * @return the user
-	 */
+	/** @return cliente associado à locação */
 	public User getUser() {
 		return user;
 	}
 
-	/**
-	 * @param user the user to set
-	 */
+	/** @param user cliente associado à locação */
 	public void setUser(User user) {
 		this.user = user;
 	}
 
-	/**
-	 * @return the vehicle
-	 */
+	/** @return veículo locado */
 	public Vehicle getVehicle() {
 		return vehicle;
 	}
 
-	/**
-	 * @param vehicle the vehicle to set
-	 */
+	/** @param vehicle veículo locado */
 	public void setVehicle(Vehicle vehicle) {
 		this.vehicle = vehicle;
 	}
 
-	/**
-	 * @return the pickupAgency
-	 */
+	/** @return agência de retirada */
 	public Agency getPickupAgency() {
 		return pickupAgency;
 	}
 
-	/**
-	 * @param pickupAgency the pickupAgency to set
-	 */
+	/** @param pickupAgency agência de retirada */
 	public void setPickupAgency(Agency pickupAgency) {
 		this.pickupAgency = pickupAgency;
 	}
 
-	/**
-	 * @return the returnAgency
-	 */
+	/** @return agência de devolução */
 	public Agency getReturnAgency() {
 		return returnAgency;
 	}
 
-	/**
-	 * @param returnAgency the returnAgency to set
-	 */
+	/** @param returnAgency agência de devolução */
 	public void setReturnAgency(Agency returnAgency) {
 		this.returnAgency = returnAgency;
 	}
 
-	/**
-	 * @return the pickupDate
-	 */
+	/** @return data de retirada do veículo */
 	public LocalDate getPickupDate() {
 		return pickupDate;
 	}
 
-	/**
-	 * @param pickupDate the pickupDate to set
-	 */
+	/** @param pickupDate data de retirada do veículo */
 	public void setPickupDate(LocalDate pickupDate) {
 		this.pickupDate = pickupDate;
 	}
 
-	/**
-	 * @return the expectedReturnDate
-	 */
+	/** @return data prevista de devolução */
 	public LocalDate getExpectedReturnDate() {
 		return expectedReturnDate;
 	}
 
-	/**
-	 * @param expectedReturnDate the expectedReturnDate to set
-	 */
+	/** @param expectedReturnDate data prevista de devolução */
 	public void setExpectedReturnDate(LocalDate expectedReturnDate) {
 		this.expectedReturnDate = expectedReturnDate;
 	}
 
-	/**
-	 * @return the returnDate
-	 */
+	/** @return data efetiva de devolução */
 	public LocalDate getReturnDate() {
 		return returnDate;
 	}
 
-	/**
-	 * @param returnDate the returnDate to set
-	 */
+	/** @param returnDate data efetiva de devolução */
 	public void setReturnDate(LocalDate returnDate) {
 		this.returnDate = returnDate;
 	}
 
-	/**
-	 * @return the status
-	 */
+	/** @return status atual da locação */
 	public RentalStatus getStatus() {
 		return status;
 	}
 
-	/**
-	 * @param status the status to set
-	 */
+	/** @param status status atual da locação */
 	public void setStatus(RentalStatus status) {
 		this.status = status;
 	}
 
-	/**
-	 * @return the totalPrice
-	 */
+	/** @return valor total da locação */
 	public Double getTotalPrice() {
 		return totalPrice;
 	}
 
-	/**
-	 * @param totalPrice the totalPrice to set
-	 */
+	/** @param totalPrice valor total da locação */
 	public void setTotalPrice(Double totalPrice) {
 		this.totalPrice = totalPrice;
 	}

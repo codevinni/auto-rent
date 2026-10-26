@@ -16,7 +16,8 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 /**
- * 
+ * Entidade JPA que representa um veículo da frota.
+ * Contém dados do veículo, categoria, valor da diária, status e agência atual.
  */
 @Entity
 @Table(name = "vehicle_table")
@@ -42,10 +43,24 @@ public class Vehicle implements java.io.Serializable {
 	@ManyToMany
 	private List<Accessory> accessories;
 	
+	/** Construtor padrão exigido pelo JPA. */
 	public Vehicle() {}
 
+	/**
+	 * Cria um veículo com os dados informados.
+	 *
+	 * @param licensePlate placa do veículo
+	 * @param brand marca do veículo
+	 * @param model modelo do veículo
+	 * @param year ano de fabricação
+	 * @param category categoria do veículo
+	 * @param dailyPrice valor da diária
+	 * @param status status atual do veículo
+	 * @param agency agência onde o veículo está
+	 * @param accessories lista de acessórios do veículo
+	 */
 	public Vehicle(String licensePlate, String brand, String model, Integer year, VehicleCategory category,
-			       Double dailyPrice, VehicleStatus status, Agency agency, List<Accessory> accessories) {
+		       Double dailyPrice, VehicleStatus status, Agency agency, List<Accessory> accessories) {
 		
 		this.licensePlate = licensePlate;
 		this.brand = brand;
@@ -57,142 +72,102 @@ public class Vehicle implements java.io.Serializable {
 		this.accessories = accessories;
 	}
 
-	/**
-	 * @return the id
-	 */
+	/** @return identificador único do veículo */
 	public Long getId() {
 		return id;
 	}
 
-	/**
-	 * @param id the id to set
-	 */
+	/** @param id identificador único do veículo */
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	/**
-	 * @return the licensePlate
-	 */
+	/** @return placa do veículo */
 	public String getLicensePlate() {
 		return licensePlate;
 	}
 
-	/**
-	 * @param licensePlate the licensePlate to set
-	 */
+	/** @param licensePlate placa do veículo */
 	public void setLicensePlate(String licensePlate) {
 		this.licensePlate = licensePlate;
 	}
 
-	/**
-	 * @return the brand
-	 */
+	/** @return marca do veículo */
 	public String getBrand() {
 		return brand;
 	}
 
-	/**
-	 * @param brand the brand to set
-	 */
+	/** @param brand marca do veículo */
 	public void setBrand(String brand) {
 		this.brand = brand;
 	}
 
-	/**
-	 * @return the model
-	 */
+	/** @return modelo do veículo */
 	public String getModel() {
 		return model;
 	}
 
-	/**
-	 * @param model the model to set
-	 */
+	/** @param model modelo do veículo */
 	public void setModel(String model) {
 		this.model = model;
 	}
 
-	/**
-	 * @return the year
-	 */
+	/** @return ano de fabricação do veículo */
 	public Integer getYear() {
 		return year;
 	}
 	
-	/**
-	 * @param year the year to set
-	 */
+	/** @param year ano de fabricação do veículo */
 	public void setYear(Integer year) {
 		this.year = year;
 	}
 	
-	/**
-	 * @return the category
-	 */
+	/** @return categoria do veículo */
 	public VehicleCategory getCategory() {
 		return category;
 	}
 
-	/**
-	 * @param category the category to set
-	 */
+	/** @param category categoria do veículo */
 	public void setCategory(VehicleCategory category) {
 		this.category = category;
 	}
 	
-	/**
-	 * @return the dailyPrice
-	 */
+	/** @return valor da diária do veículo */
 	public Double getDailyPrice() {
 		return dailyPrice;
 	}
 
-	/**
-	 * @param dailyPrice the dailyPrice to set
-	 */
+	/** @param dailyPrice valor da diária do veículo */
 	public void setDailyPrice(Double dailyPrice) {
 		this.dailyPrice = dailyPrice;
 	}
 
-	/**
-	 * @return the status
-	 */
+	/** @return status atual do veículo */
 	public VehicleStatus getStatus() {
 		return status;
 	}
 
-	/**
-	 * @param status the status to set
-	 */
+	/** @param status status atual do veículo */
 	public void setStatus(VehicleStatus status) {
 		this.status = status;
 	}
 
-	/**
-	 * @return the agency
-	 */
+	/** @return agência onde o veículo está localizado */
 	public Agency getAgency() {
 		return agency;
 	}
 
-	/**
-	 * @param agency the agency to set
-	 */
+	/** @param agency agência onde o veículo está localizado */
 	public void setAgency(Agency agency) {
 		this.agency = agency;
 	}
 
-	/**
-	 * @return the accessories
-	 */
+	/** @return lista de acessórios associados ao veículo */
 	public List<Accessory> getAccessories() {
 		return accessories;
 	}
 
-	/**
-	 * @param accessories the accessories to set
-	 */
+	/** @param accessories lista de acessórios do veículo */
 	public void setAccessories(List<Accessory> accessories) {
 		this.accessories = accessories;
 	}

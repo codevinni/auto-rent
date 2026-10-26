@@ -1,14 +1,11 @@
-/**
- * 
- */
 package br.autorent.utils;
 
 import jakarta.persistence.Embeddable;
 
 /**
- * 
+ * Objeto embutível JPA que representa um endereço completo.
+ * Utilizado como componente embarcado em entidades como {@link br.autorent.model.Agency}.
  */
-
 @Embeddable
 public class Address implements java.io.Serializable {
 
@@ -16,8 +13,20 @@ public class Address implements java.io.Serializable {
 
 	private String country, state, city, neighborhood, street, number, complement, code;
 
+	/** Construtor padrão exigido pelo JPA. */
 	public Address() {}
 	
+	/**
+	 * Cria um endereço sem complemento.
+	 *
+	 * @param country país
+	 * @param state estado/UF
+	 * @param city cidade
+	 * @param neighborhood bairro
+	 * @param street logradouro
+	 * @param number número
+	 * @param code CEP
+	 */
 	public Address(String country, String state, String city, String neighborhood,
 				   String street, String number, String code) {
 		
@@ -30,6 +39,18 @@ public class Address implements java.io.Serializable {
 		this.code = code;
 	}
 
+	/**
+	 * Cria um endereço com complemento.
+	 *
+	 * @param country país
+	 * @param state estado/UF
+	 * @param city cidade
+	 * @param neighborhood bairro
+	 * @param street logradouro
+	 * @param number número
+	 * @param complement complemento (ex: apto, bloco)
+	 * @param code CEP
+	 */
 	public Address(String country, String state, String city, String neighborhood, 
 			       String street, String number, String complement, String code) {
 		
@@ -43,114 +64,82 @@ public class Address implements java.io.Serializable {
 		this.code = code;
 	}
 
-	/**
-	 * @return the country
-	 */
+	/** @return país */
 	public String getCountry() {
 		return country;
 	}
 
-	/**
-	 * @param country the country to set
-	 */
+	/** @param country país */
 	public void setCountry(String country) {
 		this.country = country;
 	}
 
-	/**
-	 * @return the state
-	 */
+	/** @return estado/UF */
 	public String getState() {
 		return state;
 	}
 
-	/**
-	 * @param state the state to set
-	 */
+	/** @param state estado/UF */
 	public void setState(String state) {
 		this.state = state;
 	}
 
-	/**
-	 * @return the city
-	 */
+	/** @return cidade */
 	public String getCity() {
 		return city;
 	}
 
-	/**
-	 * @param city the city to set
-	 */
+	/** @param city cidade */
 	public void setCity(String city) {
 		this.city = city;
 	}
 
-	/**
-	 * @return the neighborhood
-	 */
+	/** @return bairro */
 	public String getNeighborhood() {
 		return neighborhood;
 	}
 
-	/**
-	 * @param neighborhood the neighborhood to set
-	 */
+	/** @param neighborhood bairro */
 	public void setNeighborhood(String neighborhood) {
 		this.neighborhood = neighborhood;
 	}
 
-	/**
-	 * @return the street
-	 */
+	/** @return logradouro */
 	public String getStreet() {
 		return street;
 	}
 
-	/**
-	 * @param street the street to set
-	 */
+	/** @param street logradouro */
 	public void setStreet(String street) {
 		this.street = street;
 	}
 
-	/**
-	 * @return the number
-	 */
+	/** @return número do endereço */
 	public String getNumber() {
 		return number;
 	}
 
-	/**
-	 * @param number the number to set
-	 */
+	/** @param number número do endereço */
 	public void setNumber(String number) {
 		this.number = number;
 	}
 
-	/**
-	 * @return the complement
-	 */
+	/** @return complemento (ex: apto, bloco) */
 	public String getComplement() {
 		return complement;
 	}
 
-	/**
-	 * @param complement the complement to set
-	 */
+	/** @param complement complemento (ex: apto, bloco) */
 	public void setComplement(String complement) {
 		this.complement = complement;
 	}
 
-	/**
-	 * @return the code
-	 */
+	/** @return CEP */
 	public String getCode() {
 		return code;
 	}
 
-	/**
-	 * @param code the code to set
-	 */
+	/** @param code CEP */
 	public void setCode(String code) {
 		this.code = code;
 	}
