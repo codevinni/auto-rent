@@ -21,6 +21,11 @@ import jakarta.ejb.Stateful;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+/**
+ * EJB Stateful que gerencia o fluxo completo de locação/reserva de veículos.
+ * Mantém o estado da locação em construção durante a sessão do cliente.
+ * Ao confirmar, persiste a locação e atualiza o status do veículo.
+ */
 @Stateful
 public class RentalProcessBean implements IRentalProcess {
 
@@ -39,82 +44,102 @@ public class RentalProcessBean implements IRentalProcess {
 	private Rental rental;
 	private List<Accessory> selectedAccessories;
 	
+	/** Inicializa o bean com uma locação vazia e lista de acessórios vazia. */
 	public RentalProcessBean() {
 		rental = new Rental();
 		selectedAccessories = new ArrayList<Accessory>();
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public User getCustomer() {
 		return rental.getUser();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setCustomer(User user) {
 		rental.setUser(user);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Agency getPickupAgency() {
 		return rental.getPickupAgency();
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void setPickupAgency(Agency pickupAgency) {
 		rental.setPickupAgency(pickupAgency);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Agency getReturnAgency() {
 		return rental.getReturnAgency();
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void setReturnAgency(Agency returnAgency) {
 		rental.setReturnAgency(returnAgency);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Vehicle getVehicle() {
 		return rental.getVehicle();
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void setVehicle(Vehicle vehicle) {
 		rental.setVehicle(vehicle);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public LocalDate getPickupDate() {
 		return rental.getPickupDate();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public LocalDate getExpectedReturnDate() {
 		return rental.getExpectedReturnDate();
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void setPeriod(LocalDate pickupDate, LocalDate expectedReturnDate) {
 		rental.setPickupDate(pickupDate);
 		rental.setExpectedReturnDate(expectedReturnDate);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void addAccessory(Accessory accessory) {
 		selectedAccessories.add(accessory);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void removeAccessory(Accessory accessory) {
 		selectedAccessories.removeIf(a -> a.getId().equals(accessory.getId()));
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public List<Accessory> getSelectedAccessories() {
 		return selectedAccessories;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * Soma a diária do veículo com as diárias dos acessórios, multiplicado pelo número de dias.
+	 * Retorna 0 se veículo ou datas estiverem indefinidos. Mínimo de 1 diária.
+	 */
 	@Override
 	public Double calculateTotalValue() {
 
@@ -138,6 +163,11 @@ public class RentalProcessBean implements IRentalProcess {
         return dailyTotal * days;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * Marca o veículo como {@code RENTED} e a locação como {@code IN_PROGRESS}.
+	 * Atualiza o cache de frota e reinicia o estado do bean.
+	 */
 	@Override
 	public Rental confirmRental() {
 		
@@ -169,6 +199,11 @@ public class RentalProcessBean implements IRentalProcess {
         return confirmed;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * Marca o veículo como {@code RESERVED} e a locação como {@code RESERVED}.
+	 * Atualiza o cache de frota e reinicia o estado do bean.
+	 */
 	@Override
 	public Rental confirmReservation() {
 		
@@ -198,11 +233,13 @@ public class RentalProcessBean implements IRentalProcess {
         return confirmed;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Rental getRental() {
 		return rental;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void cancel() {
 		rental = new Rental();

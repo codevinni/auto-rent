@@ -10,6 +10,10 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 
+/**
+ * EJB Stateful que gerencia a autenticação de usuários.
+ * Mantém o usuário logado na sessão até o logout.
+ */
 @Stateful
 public class UserAuthBean implements IUserAuth {
 
@@ -18,10 +22,19 @@ public class UserAuthBean implements IUserAuth {
 	
 	private User loggedUser;
 	
+	/** Inicializa o bean sem usuário autenticado. */
 	public UserAuthBean() {
 		this.loggedUser = null;
 	}
 	
+	/**
+	 * Autentica um usuário verificando CPF e senha.
+	 * Busca o usuário pela named query e compara o hash da senha.
+	 *
+	 * @param cpf CPF do usuário
+	 * @param password senha em texto
+	 * @return {@code true} se autenticado com sucesso
+	 */
 	@Override
 	public boolean login(String cpf, String password) {
 		
@@ -41,17 +54,22 @@ public class UserAuthBean implements IUserAuth {
 		return isAuthenticated();
 	}
 
+	/**
+	 * Encerra a sessão do usuário e remove o bean stateful.
+	 */
 	@Remove
 	@Override
 	public void logout() {
 		this.loggedUser = null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public User getLoggedUser() {
 		return loggedUser;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean isAuthenticated() {
 		return loggedUser != null;

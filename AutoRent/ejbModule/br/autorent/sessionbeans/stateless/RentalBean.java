@@ -9,13 +9,21 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
+/**
+ * EJB Stateless que implementa operações CRUD e consultas para a entidade {@link Rental}.
+ */
 @Stateless
 public class RentalBean extends AbstractCrudBean<Rental> implements IRental {
 
+	/** Inicializa o bean com a classe {@link Rental}. */
 	public RentalBean() {
 		super(Rental.class);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * Carrega veículo e agências via JOIN FETCH.
+	 */
 	@Override
 	public List<Rental> findByUser(Long userId) {
 		
@@ -26,6 +34,10 @@ public class RentalBean extends AbstractCrudBean<Rental> implements IRental {
 					.getResultList();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * Filtra locações com status {@code IN_PROGRESS}.
+	 */
 	@Override
 	public List<Rental> findActiveByUser(Long userId) {
 		
@@ -37,6 +49,10 @@ public class RentalBean extends AbstractCrudBean<Rental> implements IRental {
 					.getResultList();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * Filtra locações com status {@code RESERVED}, ordenadas por data de retirada (asc).
+	 */
 	@Override
 	public List<Rental> findReservationsByUser(Long userId) {
 		
@@ -48,6 +64,10 @@ public class RentalBean extends AbstractCrudBean<Rental> implements IRental {
 					.getResultList();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * Retorna no máximo um resultado; {@code null} se nenhuma locação ativa for encontrada.
+	 */
 	@Override
 	public Rental findCurrentRentedByUser(Long userId) {
 		

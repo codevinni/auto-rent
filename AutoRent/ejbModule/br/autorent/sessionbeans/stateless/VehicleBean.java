@@ -10,13 +10,18 @@ import br.autorent.sessionbeans.interfaces.IVehicle;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.TypedQuery;
 
+/**
+ * EJB Stateless que implementa operações CRUD e consultas para a entidade {@link Vehicle}.
+ */
 @Stateless
 public class VehicleBean extends AbstractCrudBean<Vehicle> implements IVehicle {
 
+	/** Inicializa o bean com a classe {@link Vehicle}. */
 	public VehicleBean() {
 		super(Vehicle.class);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public List<Vehicle> findAvailableByAgency(Long agencyId) {
 		
@@ -28,6 +33,7 @@ public class VehicleBean extends AbstractCrudBean<Vehicle> implements IVehicle {
 					.getResultList();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public List<Vehicle> findRentedVehicles() {
 		
@@ -38,6 +44,10 @@ public class VehicleBean extends AbstractCrudBean<Vehicle> implements IVehicle {
 					.getResultList();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * Constrói a query JPQL dinamicamente conforme os filtros não-nulos.
+	 */
 	@Override
 	public List<Vehicle> findByFilter(VehicleCategory category, Long agencyId, VehicleStatus status) {
 
@@ -66,6 +76,7 @@ public class VehicleBean extends AbstractCrudBean<Vehicle> implements IVehicle {
 		return query.getResultList();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public List<Agency> findAgenciesWithAvailableVehiclesByCategory(VehicleCategory category) {
 

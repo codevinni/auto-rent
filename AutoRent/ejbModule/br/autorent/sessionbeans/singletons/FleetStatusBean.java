@@ -8,6 +8,11 @@ import jakarta.ejb.Startup;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+/**
+ * EJB Singleton que mantém em cache as estatísticas da frota de veículos.
+ * Inicializado automaticamente no startup da aplicação.
+ * O cache é atualizado via {@link #refreshCache()} após operações de locação.
+ */
 @Startup
 @Singleton
 public class FleetStatusBean implements IFleetStatus {
@@ -21,6 +26,10 @@ public class FleetStatusBean implements IFleetStatus {
     private Long totalReserved = 0L;
     private Long totalInMaintenance = 0L;
 	
+    /**
+     * Carrega/recarrega todas as contagens de veículos por status.
+     * Executado automaticamente no startup e sob demanda.
+     */
     @PostConstruct
 	@Override
 	public void refreshCache() {
@@ -31,6 +40,12 @@ public class FleetStatusBean implements IFleetStatus {
         this.totalInMaintenance = countVehiclesByStatus(VehicleStatus.MAINTENANCE);
 	}
     
+    /**
+     * Conta veículos por status usando JPQL.
+     *
+     * @param status status para filtrar, ou {@code null} para contar todos
+     * @return quantidade de veículos
+     */
     private Long countVehiclesByStatus(VehicleStatus status) {
     	
         String jpql;
@@ -46,31 +61,37 @@ public class FleetStatusBean implements IFleetStatus {
         return count != null ? count : 0L;
     }
     
+	/** {@inheritDoc} */
 	@Override
 	public Long getTotalVehicles() {
 		return totalVehicles;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Long getTotalAvailable() {
 		return totalAvailable;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Long getTotalRented() {
 		return totalRented;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Long getTotalReserved() {
 		return totalReserved;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Long getTotalInMaintenance() {
 		return totalInMaintenance;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Long getAvailableByAgency(Long agencyId) {
 		
