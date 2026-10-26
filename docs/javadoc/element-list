@@ -1,0 +1,10 @@
+br.autorent.enums
+br.autorent.gui
+br.autorent.managedbeans
+br.autorent.model
+br.autorent.services
+br.autorent.sessionbeans.interfaces
+br.autorent.sessionbeans.singletons
+br.autorent.sessionbeans.stateful
+br.autorent.sessionbeans.stateless
+br.autorent.utils
